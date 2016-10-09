@@ -1,29 +1,17 @@
 package com.aim.duty.duty_build.service;
 
-import com.aim.duty.duty_base.entity.bo.Forge;
-
 public interface BuildService {
-	public void addFuel(Forge forge, int propId);
 
-	public void updateTemperature(Forge forge);
+	public void initWall();
 
-	public void ready(int propId, int num);
+	public void showWall();
 
-	public void hitBrick();
+	public void showOnePositionByIndex(int index);
 
-	public void createBrick();
+	public void replaceBrick(int indexAtWall, int indexAtCache);
 
-	public void addBrickMagic(int magicId);
+	public void replaceCement(int indexAtWall, int indexAtCache);
 
-	public void createCement(int mineId, int num);
+	public void addMagic(int indexAtWall, int magicId,byte propType);
 
-	public void destroyBrick(int propId);
-
-	public void addCementMagic(int magicId);
-
-	public void addBrickIntoWall(int index);
-	
-	public void removeBrickFromWall(int index);
-
-	public void createWall();
 }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.aim.duty.duty_base.entity.base.AbstractProp;
 import com.aim.duty.duty_base.entity.bo.Brick;
 import com.aim.duty.duty_base.entity.bo.Cement;
 import com.aim.duty.duty_base.entity.bo.Forge;
@@ -27,7 +28,10 @@ public class ConstantCache {
 	
 	public static List<Wall> walls= new ArrayList<>();
 	
-	public static Forge forge = null;
-	public static BuildService buildService = null;
+	
+	/***********************************************/
+	public static BuildService buildService = null;	
+	public static Wall wall = null;
+	public static List<AbstractProp> warehouse = new ArrayList<>();
 
 }
