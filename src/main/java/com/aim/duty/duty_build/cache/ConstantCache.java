@@ -24,14 +24,17 @@ public class ConstantCache {
 	public static List<Brick> rawBricks = new ArrayList<>();
 	public static int cementCount = 0;
 
-	public static Map<Integer,Brick> wallBricks = new HashMap<>();
-	
-	public static List<Wall> walls= new ArrayList<>();
-	
-	
+	public static Map<Integer, Brick> wallBricks = new HashMap<>();
+
+	public static List<Wall> walls = new ArrayList<>();
+
 	/***********************************************/
-	public static BuildService buildService = null;	
+	public static BuildService buildService = null;
 	public static Wall wall = null;
 	public static List<AbstractProp> warehouse = new ArrayList<>();
+	public static int brickSourceId = -1;
+	public static int brickSourceNum = 0;
+	public static int cementSourceId = -1;
+	public static int cementSourceNum = 0;
 
 }

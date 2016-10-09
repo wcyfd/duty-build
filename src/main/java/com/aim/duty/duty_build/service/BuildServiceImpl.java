@@ -1,6 +1,9 @@
 package com.aim.duty.duty_build.service;
 
+import java.util.Set;
+
 import com.aim.duty.duty_base.entity.base.AbstractMagicProp;
+import com.aim.duty.duty_base.entity.base.AbstractProp;
 import com.aim.duty.duty_base.entity.base.Constant;
 import com.aim.duty.duty_base.entity.bo.Brick;
 import com.aim.duty.duty_base.entity.bo.Cement;
@@ -36,10 +39,46 @@ public class BuildServiceImpl implements BuildService {
 	public void replaceBrick(int indexAtWall, int indexAtCache) {
 		// TODO Auto-generated method stub
 		Wall wall = ConstantCache.wall;
+
+		Brick brickAtCache = (Brick) ConstantCache.warehouse.get(indexAtCache);
+		Brick extractBrick = this.extractBrick(brickAtCache, 1);
+
+		if (extractBrick == null) {
+			return;
+		}
+
 		Brick brickInWall = wall.getBrickMap().remove(indexAtWall);
-		Brick brickAtCache = (Brick) ConstantCache.warehouse.remove(indexAtCache);
+		int num = brickAtCache.getNum();
+		if (num == 0) {
+			ConstantCache.warehouse.remove(indexAtCache);
+		}
 		ConstantCache.warehouse.add(brickInWall);
-		wall.getBrickMap().put(indexAtWall, brickAtCache);
+		wall.getBrickMap().put(indexAtWall, extractBrick);
+	}
+
+	private Brick extractBrick(Brick brick, int count) {
+		Brick b = new Brick();
+		b.setMineId(brick.getMineId());
+		int sourceNum = brick.getNum();
+		int deltaNum = sourceNum - count;
+		if (deltaNum <= 0) {
+			b.setNum(sourceNum);
+			brick.setNum(0);
+		} else {
+			b.setNum(count);
+			brick.setNum(deltaNum);
+		}
+
+		if (b.getNum() == 0) {
+			return null;
+		}
+
+		for (Set<Magic> magics : brick.getMagicDetailMap().values()) {
+			for (Magic magic : magics) {
+				b.addMagic(magic);
+			}
+		}
+		return b;
 	}
 
 	@Override
@@ -73,6 +112,31 @@ public class BuildServiceImpl implements BuildService {
 		magic.setValue(1);
 
 		magicProp.addMagic(magic);
+	}
+
+	@Override
+	public void chooseMaterial(int brickSourceId, int brickSourceNum, int cementSourceId, int cementSourceNum) {
+		// TODO Auto-generated method stub
+		ConstantCache.brickSourceId = brickSourceId;
+		ConstantCache.brickSourceNum = brickSourceNum;
+		ConstantCache.cementSourceId = cementSourceId;
+		ConstantCache.cementSourceNum = cementSourceNum;
+	}
+
+	@Override
+	public void getResult(int brickSourceNum, int cementSourceNum) {
+		// TODO Auto-generated method stub
+		Brick brick = new Brick();
+		brick.setMineId(ConstantCache.brickSourceId);
+		brick.setNum(brickSourceNum);
+
+		Cement cement = new Cement();
+		cement.setMineId(ConstantCache.cementSourceId);
+		cement.setNum(cementSourceNum);
+
+		ConstantCache.warehouse.add(cement);
+		ConstantCache.warehouse.add(brick);
+
 	}
 
 }

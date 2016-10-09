@@ -12,6 +12,9 @@ public interface BuildService {
 
 	public void replaceCement(int indexAtWall, int indexAtCache);
 
-	public void addMagic(int indexAtWall, int magicId,byte propType);
+	public void addMagic(int indexAtWall, int magicId, byte propType);
 
+	public void chooseMaterial(int brickSourceId, int brickSourceNum, int cementSourceId, int cementSourceNum);
+
+	public void getResult(int brickSourceNum, int cementSourceNum);
 }

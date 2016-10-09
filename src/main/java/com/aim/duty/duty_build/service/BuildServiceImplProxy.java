@@ -45,4 +45,16 @@ public class BuildServiceImplProxy implements BuildService{
 		
 	}
 
+	@Override
+	public void chooseMaterial(int brickSourceId, int brickSourceNum, int cementSourceId, int cementSourceNum) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getResult(int brickSourceNum, int cementSourceNum) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
