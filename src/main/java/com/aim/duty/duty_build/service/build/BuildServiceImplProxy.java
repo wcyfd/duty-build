@@ -1,4 +1,4 @@
-package com.aim.duty.duty_build.service;
+package com.aim.duty.duty_build.service.build;
 
 
 public class BuildServiceImplProxy implements BuildService{

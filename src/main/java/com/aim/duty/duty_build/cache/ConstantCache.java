@@ -8,9 +8,9 @@ import java.util.Map;
 import com.aim.duty.duty_base.entity.base.AbstractProp;
 import com.aim.duty.duty_base.entity.bo.Brick;
 import com.aim.duty.duty_base.entity.bo.Cement;
-import com.aim.duty.duty_base.entity.bo.Forge;
+import com.aim.duty.duty_base.entity.bo.Furnace;
 import com.aim.duty.duty_base.entity.bo.Wall;
-import com.aim.duty.duty_build.service.BuildService;
+import com.aim.duty.duty_build.service.build.BuildService;
 
 public class ConstantCache {
 	public static int totalCount = 0;
