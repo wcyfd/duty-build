@@ -1,24 +1,24 @@
-package com.aim.duty.duty_build.service.build;
+package com.aim.duty.duty_build.module.build.service;
 
 
 public class BuildServiceImplProxy implements BuildService{
 
-	private BuildService service;
-
-	public BuildServiceImplProxy(BuildService service) {
-		this.service = service;
+	private BuildService buildService;
+	public void setBuildService(BuildService buildService) {
+		this.buildService = buildService;
 	}
+	
 
 	@Override
 	public void initWall() {
 		// TODO Auto-generated method stub
-		service.initWall();
+		buildService.initWall();
 	}
 
 	@Override
 	public void showWall() {
 		// TODO Auto-generated method stub
-		service.showWall();
+		buildService.showWall();
 	}
 
 	@Override

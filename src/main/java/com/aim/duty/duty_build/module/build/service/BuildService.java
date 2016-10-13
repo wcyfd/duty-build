@@ -1,4 +1,4 @@
-package com.aim.duty.duty_build.service.build;
+package com.aim.duty.duty_build.module.build.service;
 
 public interface BuildService {
 

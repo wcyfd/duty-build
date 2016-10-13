@@ -1,20 +1,27 @@
-package com.aim.duty.duty_build.service.build;
+package com.aim.duty.duty_build.module.build.service;
 
 import com.aim.duty.duty_base.entity.base.AbstractMagicProp;
-import com.aim.duty.duty_base.entity.base.Constant;
 import com.aim.duty.duty_base.entity.bo.Brick;
 import com.aim.duty.duty_base.entity.bo.Cement;
 import com.aim.duty.duty_base.entity.bo.Magic;
 import com.aim.duty.duty_base.entity.bo.Wall;
-import com.aim.duty.duty_base.service.PropService;
+import com.aim.duty.duty_base.service.prop.PropConstant;
+import com.aim.duty.duty_base.service.prop.PropService;
 import com.aim.duty.duty_build.cache.ConstantCache;
+import com.aim.game_base.net.WanClient;
 
 public class BuildServiceImpl implements BuildService {
 
 	private PropService propService;
 
-	public void SetPropService(PropService propService) {
+	public void setPropService(PropService propService) {
 		this.propService = propService;
+	}
+
+	private WanClient marketServer;
+
+	public void setMarketServer(WanClient marketServer) {
+		this.marketServer = marketServer;
 	}
 
 	@Override
@@ -47,17 +54,18 @@ public class BuildServiceImpl implements BuildService {
 		Brick brickAtCache = (Brick) ConstantCache.warehouse.get(indexAtCache);
 		Brick extractBrick = (Brick) propService.extract(brickAtCache, 1);
 
-		if (extractBrick == null) return;
+		if (extractBrick == null)
+			return;
 
 		Brick brickInWall = wall.getBrickMap().remove(indexAtWall);
-		
-		if (brickAtCache.getNum() == 0) 
+
+		if (brickAtCache.getNum() == 0)
 			ConstantCache.warehouse.remove(indexAtCache);
-		
+
 		ConstantCache.warehouse.add(brickInWall);
 		wall.getBrickMap().put(indexAtWall, extractBrick);
 	}
-	
+
 	@Override
 	public void replaceCement(int indexAtWall, int indexAtCache) {
 		// TODO Auto-generated method stub
@@ -66,13 +74,14 @@ public class BuildServiceImpl implements BuildService {
 		Cement cementAtCache = (Cement) ConstantCache.warehouse.get(indexAtCache);
 		Cement extractCement = (Cement) propService.extract(cementAtCache, 1);
 
-		if (extractCement == null) return;
+		if (extractCement == null)
+			return;
 
 		Cement brickInWall = wall.getCementMap().remove(indexAtWall);
-		
-		if (cementAtCache.getNum() == 0) 
+
+		if (cementAtCache.getNum() == 0)
 			ConstantCache.warehouse.remove(indexAtCache);
-		
+
 		ConstantCache.warehouse.add(brickInWall);
 		wall.getCementMap().put(indexAtWall, extractCement);
 	}
@@ -81,9 +90,9 @@ public class BuildServiceImpl implements BuildService {
 	public void addMagic(int indexAtWall, int magicId, byte propType) {
 		// TODO Auto-generated method stub
 		AbstractMagicProp magicProp = null;
-		if (propType == Constant.BRICK) {
+		if (propType == PropConstant.BRICK) {
 			magicProp = ConstantCache.wall.getBrickMap().get(indexAtWall);
-		} else if (propType == Constant.CEMENT) {
+		} else if (propType == PropConstant.CEMENT) {
 			magicProp = ConstantCache.wall.getCementMap().get(indexAtWall);
 		}
 		int size = magicProp.getMagicDetailMap().size();

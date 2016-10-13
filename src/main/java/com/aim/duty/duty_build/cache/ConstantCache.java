@@ -10,7 +10,7 @@ import com.aim.duty.duty_base.entity.bo.Brick;
 import com.aim.duty.duty_base.entity.bo.Cement;
 import com.aim.duty.duty_base.entity.bo.Furnace;
 import com.aim.duty.duty_base.entity.bo.Wall;
-import com.aim.duty.duty_build.service.build.BuildService;
+import com.aim.duty.duty_build.module.build.service.BuildService;
 
 public class ConstantCache {
 	public static int totalCount = 0;
