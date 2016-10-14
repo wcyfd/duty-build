@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.aim.duty.duty_base.entity.base.AbstractProp;
+import com.aim.duty.duty_base.entity.bo.Architect;
 import com.aim.duty.duty_base.entity.bo.Brick;
 import com.aim.duty.duty_base.entity.bo.Cement;
 import com.aim.duty.duty_base.entity.bo.Furnace;
@@ -36,5 +37,7 @@ public class ConstantCache {
 	public static int brickSourceNum = 0;
 	public static int cementSourceId = -1;
 	public static int cementSourceNum = 0;
+	
+	/***********************************************/
 
 }

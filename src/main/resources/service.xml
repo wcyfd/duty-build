@@ -13,6 +13,7 @@
 	</bean>
 	<bean id="buildService" class="com.aim.duty.duty_build.module.build.service.BuildServiceImplProxy" >
 		<property name="buildService" ref="buildServiceImpl"></property>
+		<property name="uiController" ref="uiController"></property>
 	</bean>
 	
 	<bean id="propServiceImpl" class="com.aim.duty.duty_base.service.prop.PropServiceImpl"></bean>

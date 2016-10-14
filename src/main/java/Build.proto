@@ -1,0 +1,10 @@
+syntax = "proto3";
+package com.aim.duty.duty_build.entity.protobuf.protocal;
+message CS_CreateArchitect{
+	string account=1;
+	string name=2;
+}
+message SC_CreateArchitect{
+	int32 success=1;
+}
+

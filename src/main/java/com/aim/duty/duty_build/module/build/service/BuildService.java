@@ -1,8 +1,11 @@
 package com.aim.duty.duty_build.module.build.service;
 
-public interface BuildService {
+import com.aim.game_base.entity.net.base.Protocal.SC;
 
-	public void initWall();
+public interface BuildService {
+	public void serverInit();
+
+	public SC.Builder createRole(String account,String name);
 
 	public void showWall();
 
