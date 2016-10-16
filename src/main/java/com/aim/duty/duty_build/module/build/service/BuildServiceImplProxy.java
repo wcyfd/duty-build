@@ -1,7 +1,9 @@
 package com.aim.duty.duty_build.module.build.service;
 
 import com.aim.duty.duty_build.ui.UIController;
+import com.aim.duty.duty_build_entity.bo.Role;
 import com.aim.game_base.entity.net.base.Protocal.SC;
+import com.aim.game_base.entity.net.base.Protocal.SC.Builder;
 
 public class BuildServiceImplProxy implements BuildService {
 
@@ -33,45 +35,45 @@ public class BuildServiceImplProxy implements BuildService {
 	}
 
 	@Override
-	public void showWall() {
+	public SC.Builder showWall(Role role) {
 		// TODO Auto-generated method stub
-		buildService.showWall();
+		return buildService.showWall(role);
 	}
 
 	@Override
-	public void showOnePositionByIndex(int index) {
+	public SC.Builder showBrickByIndex(Role role, int index) {
 		// TODO Auto-generated method stub
-
+		return buildService.showBrickByIndex(role, index);
 	}
 
 	@Override
-	public void replaceBrick(int indexAtWall, int indexAtCache) {
+	public SC.Builder addBrickToWall(Role role, int indexAtWall, int propId) {
 		// TODO Auto-generated method stub
-
+		return buildService.addBrickToWall(role, indexAtWall, propId);
 	}
 
 	@Override
-	public void replaceCement(int indexAtWall, int indexAtCache) {
+	public SC.Builder addMagic(Role role, int propId, int magicId) {
 		// TODO Auto-generated method stub
-
+		return buildService.addMagic(role, propId, magicId);
 	}
 
 	@Override
-	public void addMagic(int indexAtWall, int magicId, byte propType) {
+	public SC.Builder chooseMaterial(Role architect, int brickSourceId, int brickSourceNum) {
 		// TODO Auto-generated method stub
-
+		return buildService.chooseMaterial(architect, brickSourceId, brickSourceNum);
 	}
 
 	@Override
-	public void chooseMaterial(int brickSourceId, int brickSourceNum, int cementSourceId, int cementSourceNum) {
+	public SC.Builder getResult(Role architect, int brickCount) {
 		// TODO Auto-generated method stub
-
+		return buildService.getResult(architect, brickCount);
 	}
-
+	
 	@Override
-	public void getResult(int brickSourceNum, int cementSourceNum) {
+	public Builder showBag(Role role) {
 		// TODO Auto-generated method stub
-
+		return buildService.showBag(role);
 	}
 
 }

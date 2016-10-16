@@ -1,23 +1,24 @@
 package com.aim.duty.duty_build.module.build.service;
 
+import com.aim.duty.duty_build_entity.bo.Role;
 import com.aim.game_base.entity.net.base.Protocal.SC;
 
 public interface BuildService {
 	public void serverInit();
 
-	public SC.Builder createRole(String account,String name);
+	public SC.Builder createRole(String account, String name);
 
-	public void showWall();
+	public SC.Builder showWall(Role role);
 
-	public void showOnePositionByIndex(int index);
+	public SC.Builder showBrickByIndex(Role role,int index);
 
-	public void replaceBrick(int indexAtWall, int indexAtCache);
+	public SC.Builder addBrickToWall(Role role,int indexAtWall, int propId);
 
-	public void replaceCement(int indexAtWall, int indexAtCache);
+	public SC.Builder addMagic(Role role,int propId,int magicId);
 
-	public void addMagic(int indexAtWall, int magicId, byte propType);
+	public SC.Builder chooseMaterial(Role role, int brickSourceId, int brickSourceNum);
 
-	public void chooseMaterial(int brickSourceId, int brickSourceNum, int cementSourceId, int cementSourceNum);
-
-	public void getResult(int brickSourceNum, int cementSourceNum);
+	public SC.Builder getResult(Role role, int brickCount);
+	
+	public SC.Builder showBag(Role role);
 }

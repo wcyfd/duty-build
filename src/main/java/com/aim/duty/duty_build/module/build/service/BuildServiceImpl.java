@@ -1,18 +1,26 @@
 package com.aim.duty.duty_build.module.build.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.aim.duty.duty_base.common.ErrorCode;
-import com.aim.duty.duty_base.entity.base.AbstractMagicProp;
-import com.aim.duty.duty_base.entity.bo.Architect;
-import com.aim.duty.duty_base.entity.bo.Brick;
-import com.aim.duty.duty_base.entity.bo.Cement;
-import com.aim.duty.duty_base.entity.bo.Magic;
-import com.aim.duty.duty_base.entity.bo.Wall;
-import com.aim.duty.duty_base.service.prop.PropConstant;
+import com.aim.duty.duty_base.entity.base.AbstractProp;
 import com.aim.duty.duty_base.service.prop.PropService;
-import com.aim.duty.duty_build.cache.ConstantCache;
 import com.aim.duty.duty_build.cache.RoleCache;
-import com.aim.duty.duty_build.entity.protobuf.protocal.Build.SC_CreateArchitect;
-import com.aim.duty.duty_build.navigation.ProtocalId;
+import com.aim.duty.duty_build_entity.bo.Brick;
+import com.aim.duty.duty_build_entity.bo.Role;
+import com.aim.duty.duty_build_entity.bo.Wall;
+import com.aim.duty.duty_build_entity.navigation.ProtocalId;
+import com.aim.duty.duty_build_entity.po.Magic;
+import com.aim.duty.duty_build_entity.po.Room;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_AddBrickToWall;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_AddMagic;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_ChooseMaterial;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_CreateRole;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_GetResult;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_ShowBag;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_ShowBrick;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_ShowWall;
 import com.aim.game_base.entity.net.base.Protocal.SC;
 import com.aim.game_base.net.WanClient;
 
@@ -29,139 +37,194 @@ public class BuildServiceImpl implements BuildService {
 	public void setMarketServer(WanClient marketServer) {
 		this.marketServer = marketServer;
 	}
-	
 
 	@Override
 	public void serverInit() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public SC.Builder createRole(String account,String name) {
+	public SC.Builder createRole(String account, String name) {
 		// TODO Auto-generated method stub
 		SC.Builder sc = SC.newBuilder();
-		SC_CreateArchitect.Builder sc_createArchitectBuilder = SC_CreateArchitect.newBuilder();
-		
-		Architect architect = this.initArchitect();
+		SC_CreateRole.Builder sc_createArchitectBuilder = SC_CreateRole.newBuilder();
+
+		Role architect = this.initArchitect();
 		this.initWall(architect);
+		this.initRoom(architect);
 		RoleCache.putRole(architect);
-		
+
 		sc_createArchitectBuilder.setSuccess(ErrorCode.SUCCESS);
 		return sc.setProtocal(ProtocalId.CREATE_ROLE).setData(sc_createArchitectBuilder.build().toByteString());
 	}
 
-	private Architect initArchitect() {
-		Architect architect = new Architect();
+	private Role initArchitect() {
+		Role architect = new Role();
 		architect.setId(RoleCache.getRoleId());
 		return architect;
 	}
 
-	private Wall initWall(Architect architect) {
+	private Wall initWall(Role architect) {
 		Wall wall = new Wall();
 		wall.setCapacity(30);
 		return wall;
 	}
 
-	@Override
-	public void showWall() {
-		// TODO Auto-generated method stub
-
+	private Room initRoom(Role architect) {
+		Room room = new Room();
+		return room;
 	}
 
 	@Override
-	public void showOnePositionByIndex(int index) {
+	public SC.Builder showWall(Role role) {
 		// TODO Auto-generated method stub
+		SC.Builder sc = SC.newBuilder();
+		SC_ShowWall.Builder scShowBuilder = SC_ShowWall.newBuilder();
 
-	}
+		Wall wall = role.getWall();
+		scShowBuilder.setBlood(wall.getBlood()).setCapacity(wall.getCapacity());
 
-	@Override
-	public void replaceBrick(int indexAtWall, int indexAtCache) {
-		// TODO Auto-generated method stub
-		Wall wall = ConstantCache.wall;
+		Map<Integer, SC_ShowWall.Brick> bricks = new HashMap<>();
+		scShowBuilder.putAllBricks(bricks);
 
-		Brick brickAtCache = (Brick) ConstantCache.warehouse.get(indexAtCache);
-		Brick extractBrick = (Brick) propService.extract(brickAtCache, 1);
+		for (Map.Entry<Integer, Brick> entrySet : wall.getBrickMap().entrySet()) {
 
-		if (extractBrick == null)
-			return;
+			SC_ShowWall.Brick.Builder scBrickBuilder = SC_ShowWall.Brick.newBuilder();
+			Map<Integer, SC_ShowWall.Magic> magics = new HashMap<>();
+			scBrickBuilder.putAllMagics(magics).setMineId(entrySet.getValue().getMineId())
+					.setId(entrySet.getValue().getId());
 
-		Brick brickInWall = wall.getBrickMap().remove(indexAtWall);
+			for (Magic m : entrySet.getValue().getMagicMap().values()) {
+				magics.put(m.getMagicId(), SC_ShowWall.Magic.newBuilder().setDuration(m.getDuration())
+						.setValue(m.getValue()).setMagicId(m.getMagicId()).build());
+			}
 
-		if (brickAtCache.getNum() == 0)
-			ConstantCache.warehouse.remove(indexAtCache);
-
-		ConstantCache.warehouse.add(brickInWall);
-		wall.getBrickMap().put(indexAtWall, extractBrick);
-	}
-
-	@Override
-	public void replaceCement(int indexAtWall, int indexAtCache) {
-		// TODO Auto-generated method stub
-		Wall wall = ConstantCache.wall;
-
-		Cement cementAtCache = (Cement) ConstantCache.warehouse.get(indexAtCache);
-		Cement extractCement = (Cement) propService.extract(cementAtCache, 1);
-
-		if (extractCement == null)
-			return;
-
-		Cement brickInWall = wall.getCementMap().remove(indexAtWall);
-
-		if (cementAtCache.getNum() == 0)
-			ConstantCache.warehouse.remove(indexAtCache);
-
-		ConstantCache.warehouse.add(brickInWall);
-		wall.getCementMap().put(indexAtWall, extractCement);
-	}
-
-	@Override
-	public void addMagic(int indexAtWall, int magicId, byte propType) {
-		// TODO Auto-generated method stub
-		AbstractMagicProp magicProp = null;
-		if (propType == PropConstant.BRICK) {
-			magicProp = ConstantCache.wall.getBrickMap().get(indexAtWall);
-		} else if (propType == PropConstant.CEMENT) {
-			magicProp = ConstantCache.wall.getCementMap().get(indexAtWall);
+			bricks.put(entrySet.getKey(), scBrickBuilder.build());
 		}
-		int size = magicProp.getMagicDetailMap().size();
-		if (size > 0) {
-			System.out.println("已经有魔法");
-			return;
+
+		return sc.setProtocal(ProtocalId.SHOW_WALL).setData(scShowBuilder.build().toByteString());
+
+	}
+
+	@Override
+	public SC.Builder showBrickByIndex(Role role, int propId) {
+		// TODO Auto-generated method stub
+		SC.Builder sc = SC.newBuilder();
+		SC_ShowBrick.Builder scShowBrick = SC_ShowBrick.newBuilder();
+		Map<Integer, AbstractProp> propMap = role.getPropMap();
+		Brick brick = (Brick) propMap.get(propId);
+		scShowBrick.setMineId(brick.getMineId());
+		Map<Integer, SC_ShowBrick.Magic> scMagics = new HashMap<>();
+		scShowBrick.putAllMagics(scMagics);
+		for (Magic m : brick.getMagicMap().values()) {
+			scMagics.put(m.getMagicId(), SC_ShowBrick.Magic.newBuilder().setDuration(m.getDuration())
+					.setMagicId(m.getMagicId()).setValue(m.getValue()).build());
 		}
+
+		return sc.setProtocal(ProtocalId.SHOW_BRICK).setData(scShowBrick.build().toByteString());
+	}
+
+	@Override
+	public SC.Builder addBrickToWall(Role role, int indexAtWall, int propId) {
+		// TODO Auto-generated method stub
+		SC.Builder sc = SC.newBuilder();
+		SC_AddBrickToWall.Builder scAddBrickToWallBuilder = SC_AddBrickToWall.newBuilder();
+		Map<Integer, AbstractProp> propMap = role.getPropMap();
+		Brick prop = (Brick) propMap.get(propId);
+
+		Wall wall = role.getWall();
+		Map<Integer, Brick> wallBrickMap = wall.getBrickMap();
+		Brick b = wallBrickMap.get(indexAtWall);
+
+		if (b != null) {
+			wallBrickMap.remove(indexAtWall);
+			b.setPosition(0);
+		}
+
+		wallBrickMap.put(indexAtWall, prop);
+		prop.setPosition(1);
+		return sc.setProtocal(ProtocalId.ADD_BRICK_TO_WALL)
+				.setData(scAddBrickToWallBuilder.setSuccess(ErrorCode.SUCCESS).build().toByteString());
+	}
+
+	@Override
+	public SC.Builder addMagic(Role role, int propId, int magicId) {
+		// TODO Auto-generated method stub
+		SC.Builder sc = SC.newBuilder();
+		SC_AddMagic.Builder scAddMagicBuilder = SC_AddMagic.newBuilder();
+		Brick prop = (Brick) role.getPropMap().get(propId);
 
 		Magic magic = new Magic();
-		magic.setDuration(1);
 		magic.setMagicId(magicId);
-		magic.setValue(1);
+		magic.setValue(20);
+		magic.setDuration(30);
 
-		magicProp.addMagic(magic);
+		prop.getMagicMap().put(magic.getMagicId(), magic);
+		return sc.setProtocal(ProtocalId.ADD_MAGIC)
+				.setData(scAddMagicBuilder.setSuccess(ErrorCode.SUCCESS).build().toByteString());
+
 	}
 
 	@Override
-	public void chooseMaterial(int brickSourceId, int brickSourceNum, int cementSourceId, int cementSourceNum) {
+	public SC.Builder chooseMaterial(Role architect, int brickSourceId, int brickSourceNum) {
 		// TODO Auto-generated method stub
-		ConstantCache.brickSourceId = brickSourceId;
-		ConstantCache.brickSourceNum = brickSourceNum;
-		ConstantCache.cementSourceId = cementSourceId;
-		ConstantCache.cementSourceNum = cementSourceNum;
+		SC.Builder sc = SC.newBuilder();
+		SC_ChooseMaterial.Builder sc_chooseMaterial = SC_ChooseMaterial.newBuilder();
+
+		Room room = architect.getRoom();
+		room.setBrickNum(brickSourceNum);
+		room.setBrickSourceId(brickSourceId);
+		return sc.setProtocal(ProtocalId.CHOOSE_MATERIAL)
+				.setData(sc_chooseMaterial.setSuccess(ErrorCode.SUCCESS).build().toByteString());
 	}
 
 	@Override
-	public void getResult(int brickSourceNum, int cementSourceNum) {
+	public SC.Builder getResult(Role role, int brickCount) {
 		// TODO Auto-generated method stub
-		Brick brick = new Brick();
-		brick.setMineId(ConstantCache.brickSourceId);
-		brick.setNum(brickSourceNum);
+		SC.Builder sc = SC.newBuilder();
+		SC_GetResult.Builder scGetResultBuilder = SC_GetResult.newBuilder();
+		Map<Integer, SC_GetResult.Brick> bricks = new HashMap<>();
+		scGetResultBuilder.putAllBricks(bricks);
+		Room room = role.getRoom();
+		for (int i = 0; i < brickCount; i++) {
+			Brick b = new Brick();
+			b.setMineId(room.getBrickSourceId());
+			b.setId(role.getPropUniqueId());
+			role.getPropMap().put(b.getId(), b);
 
-		Cement cement = new Cement();
-		cement.setMineId(ConstantCache.cementSourceId);
-		cement.setNum(cementSourceNum);
-
-		ConstantCache.warehouse.add(cement);
-		ConstantCache.warehouse.add(brick);
+			bricks.put(b.getId(), SC_GetResult.Brick.newBuilder().setMineId(b.getMineId()).build());
+		}
+		return sc.setProtocal(ProtocalId.GET_RESULT).setData(scGetResultBuilder.build().toByteString());
 
 	}
 
+	@Override
+	public SC.Builder showBag(Role role) {
+		// TODO Auto-generated method stub
+		SC.Builder sc = SC.newBuilder();
+		SC_ShowBag.Builder scShowBagBuilder = SC_ShowBag.newBuilder();
+
+		Map<Integer, SC_ShowBag.Brick> bricks = new HashMap<>();
+		scShowBagBuilder.putAllBricks(bricks);
+
+		Map<Integer, AbstractProp> propMap = role.getPropMap();
+		for (AbstractProp p : propMap.values()) {
+			Brick b = (Brick) p;
+
+			SC_ShowBag.Brick.Builder scBrick = SC_ShowBag.Brick.newBuilder();
+			scBrick.setMineId(b.getMineId()).setId(b.getId());
+			Map<Integer, SC_ShowBag.Magic> magics = new HashMap<>();
+			scBrick.putAllMagics(magics);
+
+			for (Magic m : b.getMagicMap().values()) {
+				magics.put(m.getMagicId(), SC_ShowBag.Magic.newBuilder().setDuration(m.getDuration())
+						.setValue(m.getValue()).setMagicId(m.getMagicId()).build());
+			}
+
+			bricks.put(b.getId(), scBrick.build());
+		}
+		return sc.setProtocal(ProtocalId.SHOW_BAG).setData(scShowBagBuilder.build().toByteString());
+	}
 
 }

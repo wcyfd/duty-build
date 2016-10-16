@@ -73,14 +73,9 @@
 
 		<dependency>
 			<groupId>com.aim.duty</groupId>
-			<artifactId>duty-base</artifactId>
+			<artifactId>duty-build-entity</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		
-		<dependency>
-			<groupId>com.aim</groupId>
-			<artifactId>game-base</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+
 	</dependencies>
 </project>

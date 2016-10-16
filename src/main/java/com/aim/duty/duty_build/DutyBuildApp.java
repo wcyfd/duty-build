@@ -3,20 +3,11 @@ package com.aim.duty.duty_build;
 import java.net.InetSocketAddress;
 
 import com.aim.duty.duty_base.cache.ConstantCache;
-import com.aim.duty.duty_base.entity.bo.Brick;
-import com.aim.duty.duty_base.entity.bo.Magic;
-import com.aim.duty.duty_base.entity.protobuf.protocal.market.Market.CS_SaleCommodity;
-import com.aim.duty.duty_base.service.Constant;
-import com.aim.duty.duty_base.service.prop.PropConstant;
-import com.aim.duty.duty_base.util.Util;
 import com.aim.duty.duty_build.module.build.service.BuildService;
 import com.aim.duty.duty_build.net.ClientHandler;
-import com.aim.game_base.entity.net.base.Protocal.CS;
 import com.aim.game_base.net.SpringContext;
-import com.aim.game_base.net.Utils;
 import com.aim.game_base.net.WanClient;
 import com.aim.game_base.net.WanClient.WanClientType;
-import com.google.protobuf.ByteString;
 
 /**
  * Hello world!
@@ -28,7 +19,7 @@ public class DutyBuildApp {
 	public static void main(String[] args) {
 		SpringContext.initSpringCtx(START_CONFIG_FILE);
 
-		ConstantCache.init();
+//		ConstantCache.init();
 		BuildService buildService = SpringContext.getBean("buildService");
 		buildService.serverInit();
 		
