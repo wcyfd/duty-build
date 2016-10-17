@@ -18,7 +18,8 @@ public class RoleCache {
 
 	public static Role getRoleBySession(IoSession session) {
 		Integer id = (Integer) session.getAttribute("roleId");
-		return roleMap.get(id);
+		Role role = roleMap.get(id);
+		return role;
 	}
 
 	private static Lock lock = new ReentrantLock();

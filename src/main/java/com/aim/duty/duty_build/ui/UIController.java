@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_GetResult;
+
 public class UIController extends Observable {
 	private MainFrame mainFrame;
 
@@ -33,4 +35,16 @@ public class UIController extends Observable {
 		
 		this.notifyObservers(list);
 	}
+
+	public void getResult(SC_GetResult scData) {
+		// TODO Auto-generated method stub
+		List list = new ArrayList<>();
+		list.add("getResult");
+		list.add(scData);
+		this.setChanged();
+		
+		this.notifyObservers(list);
+		
+	}
+	
 }

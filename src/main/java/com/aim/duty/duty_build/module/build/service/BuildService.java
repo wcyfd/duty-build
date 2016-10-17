@@ -2,6 +2,8 @@ package com.aim.duty.duty_build.module.build.service;
 
 import java.util.List;
 
+import org.apache.mina.core.session.IoSession;
+
 import com.aim.duty.duty_build_entity.bo.Role;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.CS_GetResult;
 import com.aim.game_base.entity.net.base.Protocal.SC;
@@ -9,7 +11,7 @@ import com.aim.game_base.entity.net.base.Protocal.SC;
 public interface BuildService {
 	public void serverInit();
 
-	public SC.Builder createRole(String account, String name);
+	public SC.Builder createRole(String account, String name,IoSession session);
 
 	public SC.Builder showWall(Role role);
 

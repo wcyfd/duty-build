@@ -6,7 +6,9 @@ package com.aim.duty.duty_build.ui;
 
 import java.awt.EventQueue;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -15,10 +17,16 @@ import javax.swing.event.ListDataEvent;
 
 import com.aim.duty.duty_build.cache.config.OreConfigCache;
 import com.aim.duty.duty_build.cache.config.PlayCountConfigCache;
+import com.aim.duty.duty_build.ui.data.RoleData;
 import com.aim.duty.duty_build_entity.navigation.ProtocalId;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.CS_ChooseMaterial;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.CS_CreateRole;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.CS_GetResult;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_GetResult;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_GetResult.Brick;
 import com.aim.game_base.entity.net.base.Protocal.CS;
 import com.aim.game_base.net.SpringContext;
+import com.aim.game_base.net.Utils;
 import com.aim.game_base.net.WanClient;
 
 /**
@@ -194,11 +202,8 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
 					// BuildService buildService =
 					// SpringContext.getBean("buildService");
 					// buildService.createRole(account, name);
-					CS.Builder builder = CS
-							.newBuilder()
-							.setProtocal(ProtocalId.CREATE_ROLE)
-							.setData(
-									CS_CreateRole.newBuilder().setAccount(account).setName(name).build().toByteString());
+					CS.Builder builder = CS.newBuilder().setProtocal(ProtocalId.CREATE_ROLE).setData(
+							CS_CreateRole.newBuilder().setAccount(account).setName(name).build().toByteString());
 					WanClient buildClient = SpringContext.getBean("buildServer");
 					buildClient.send(builder);
 				}
@@ -207,18 +212,41 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
     		
     	});
     }      
-    
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    	
-    }
+
+	private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
+		// TODO add your handling code here:
+		CS_GetResult.Builder csGetResultBuilder = CS_GetResult.newBuilder();
+		int count = Utils.getRandomNum(RoleData.num);
+		for (int i = 0; i < count; i++) {
+			CS_GetResult.Brick.Builder csBrick = CS_GetResult.Brick.newBuilder();
+			csGetResultBuilder.addBricks(csBrick.build());
+			Map<Integer, CS_GetResult.Brick.Magic> csMagics = new HashMap<>();
+			csBrick.putAllMagics(csMagics);
+
+			int magicCount = Utils.getRandomNum(3);
+			for (int j = 0; j < magicCount; j++) {
+				CS_GetResult.Brick.Magic.Builder csGetResultMagicBuilder = CS_GetResult.Brick.Magic.newBuilder()
+						.setDuration(Utils.getRandomNum(20)).setMagicId(Utils.getRandomNum(1, 4))
+						.setValue(Utils.getRandomNum(20));
+				csMagics.put(csGetResultMagicBuilder.getMagicId(), csGetResultMagicBuilder.build());
+			}
+			
+		}
+		WanClient buildClient = SpringContext.getBean("buildServer");
+		buildClient.send(CS.newBuilder().setProtocal(ProtocalId.GET_RESULT).setData(csGetResultBuilder.build().toByteString()));
+		
+
+	}
     
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-    	int configId = OreConfigCache.getConfigIdByIndex(jComboBox2.getSelectedIndex());
-    	int playCount = PlayCountConfigCache.getCounts().get(jComboBox3.getSelectedIndex());
-    	
-    }
+		int configId = OreConfigCache.getConfigIdByIndex(jComboBox2.getSelectedIndex());
+		int playCount = PlayCountConfigCache.getCounts().get(jComboBox3.getSelectedIndex());
+		CS.Builder builder = CS.newBuilder().setProtocal(ProtocalId.CHOOSE_MATERIAL).setData(CS_ChooseMaterial.newBuilder()
+				.setBrickSourceId(configId).setBrickSourceNum(playCount).build().toByteString());
+		WanClient buildClient = SpringContext.getBean("buildServer");
+		buildClient.send(builder);
+	}
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
@@ -378,7 +406,27 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
 		}
 		else if(message.equals("chooseMaterial")){
 			this.chooseMaterial();
+		}else if(message.equals("getResult")){
+			SC_GetResult result = (SC_GetResult)data.get(1);
+			this.getResult(result);
 		}
+	}
+
+	private void getResult(final SC_GetResult result) {
+		// TODO Auto-generated method stub
+		EventQueue.invokeLater(new Runnable(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				DefaultComboBoxModel model = (DefaultComboBoxModel)jComboBox4.getModel();
+				for(Brick bricks :result.getBricksList()){
+					model.addElement(bricks);					
+				}
+				jButton3.setEnabled(true);
+			}
+			
+		});
 	}
 
 	private void chooseMaterial() {
@@ -388,6 +436,8 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
 			public void run() {
 				// TODO Auto-generated method stub
 				jButton3.setEnabled(false);
+				RoleData.sourceId = OreConfigCache.getConfigIdByIndex(jComboBox2.getSelectedIndex());
+				RoleData.num = PlayCountConfigCache.getCounts().get(jComboBox3.getSelectedIndex());
 			}
 		});
 	}

@@ -9,7 +9,16 @@
 
 
 	<bean id="navigation" class="com.aim.duty.duty_build.navigation.ActionNavigation"
-	 p:buildCreateRoleAction-ref="buildCreateRoleAction" />
+	 p:buildCreateRoleAction-ref="buildCreateRoleAction" 
+	 p:buildShowWallAction-ref="buildShowWallAction" 
+	 p:buildShowBrickAction-ref="buildShowBrickAction" 
+	 p:buildAddBrickToWallAction-ref="buildAddBrickToWallAction" 
+	 p:buildAddMagicAction-ref="buildAddMagicAction" 
+	 p:buildGetResultAction-ref="buildGetResultAction" 
+	 p:buildChooseMaterialAction-ref="buildChooseMaterialAction" 
+	 p:buildShowBagAction-ref="buildShowBagAction" 
+	 
+	 />
 
 	<bean id="buildCreateRoleAction" class="com.aim.duty.duty_build.module.build.action.BuildCreateRoleAction" p:buildService-ref="buildService"></bean>
 	<bean id="buildShowWallAction" class="com.aim.duty.duty_build.module.build.action.BuildShowWallAction" p:buildService-ref="buildService"></bean>

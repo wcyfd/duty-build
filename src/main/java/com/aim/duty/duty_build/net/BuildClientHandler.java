@@ -7,6 +7,7 @@ import com.aim.duty.duty_build.ui.UIController;
 import com.aim.duty.duty_build_entity.navigation.ProtocalId;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_ChooseMaterial;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_CreateRole;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_GetResult;
 import com.aim.game_base.entity.net.base.Protocal.SC;
 import com.aim.game_base.net.IoHandlerAdapter;
 import com.aim.game_base.net.SpringContext;
@@ -69,11 +70,15 @@ public class BuildClientHandler extends IoHandlerAdapter {
 			SC_CreateRole scData = SC_CreateRole.parseFrom(data);
 			if (scData.getSuccess() == ErrorCode.SUCCESS)
 				uiController.addRole();
-		}
-		else if(protocal == ProtocalId.CHOOSE_MATERIAL){
-			SC_ChooseMaterial scData=SC_ChooseMaterial.parseFrom(data);
-			if(scData.getSuccess() == ErrorCode.SUCCESS)
+		} else if (protocal == ProtocalId.CHOOSE_MATERIAL) {
+			SC_ChooseMaterial scData = SC_ChooseMaterial.parseFrom(data);
+			if (scData.getSuccess() == ErrorCode.SUCCESS)
 				uiController.chooseMaterial();
+		} else if (protocal == ProtocalId.GET_RESULT) {
+			SC_GetResult scData = SC_GetResult.parseFrom(data);
+			if (scData.getSuccess() == ErrorCode.SUCCESS) {
+				uiController.getResult(scData);
+			}
 		}
 
 		// Message message = (Message) messageObj;

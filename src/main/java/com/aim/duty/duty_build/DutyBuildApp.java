@@ -3,6 +3,7 @@ package com.aim.duty.duty_build;
 import java.net.InetSocketAddress;
 
 import com.aim.duty.duty_base.cache.ConstantCache;
+import com.aim.duty.duty_build.cache.config.MagicConfigCache;
 import com.aim.duty.duty_build.cache.config.OreConfigCache;
 import com.aim.duty.duty_build.cache.config.PlayCountConfigCache;
 import com.aim.duty.duty_build.module.build.service.BuildService;
@@ -11,6 +12,7 @@ import com.aim.duty.duty_build.net.BuildClientHandler;
 import com.aim.duty.duty_build.net.MarketClientHandler;
 import com.aim.duty.duty_build.net.ServerHandler;
 import com.aim.duty.duty_build.ui.UIController;
+import com.aim.duty.duty_build_entity.fo.MagicConfig;
 import com.aim.duty.duty_build_entity.fo.OreConfig;
 import com.aim.duty.duty_build_entity.fo.PlayCountConfig;
 import com.aim.game_base.net.SpringContext;
@@ -29,21 +31,22 @@ public class DutyBuildApp {
 	public static void main(String[] args) {
 
 		SpringContext.initSpringCtx(START_CONFIG_FILE);
-		
-		CacheInit();		
+
+		CacheInit();
 		ActionNavigation.init();
 
 		BuildService buildService = SpringContext.getBean("buildService");
 		buildService.serverInit();
 
-		WanClient marketServer = SpringContext.getBean("marketServer");
-		marketServer.startClient(new MarketClientHandler(), new InetSocketAddress("10.0.51.49", 10001), WanClientType.TCP);
+		// WanClient marketServer = SpringContext.getBean("marketServer");
+		// marketServer.startClient(new MarketClientHandler(), new
+		// InetSocketAddress("10.0.51.49", 10001), WanClientType.TCP);
 
 		WanServer.startServer(new ServerHandler(), new InetSocketAddress(10002), WanServerType.TCP);
-		
+
 		WanClient buildClient = SpringContext.getBean("buildServer");
-		buildClient.startClient(new BuildClientHandler(), new InetSocketAddress("10.0.51.100",10002), WanClientType.TCP);
-		
+		buildClient.startClient(new BuildClientHandler(), new InetSocketAddress("127.0.0.1", 10002), WanClientType.TCP);
+
 		UIController controller = SpringContext.getBean("uiController");
 		controller.start();
 	}
@@ -62,6 +65,16 @@ public class DutyBuildApp {
 			PlayCountConfig config = new PlayCountConfig();
 			config.setCount(counts[i]);
 			PlayCountConfigCache.putConfig(config);
+		}
+		String[] magicNames = { "火", "电", "冰" };
+		for (int i = 0; i < magicNames.length; i++) {
+			MagicConfig config = new MagicConfig();
+			config.setMagicId(i);
+			config.setMaxDuration((i + 1) * 5);
+			config.setMaxValue((i + 1) * 5);
+			config.setName(magicNames[i]);
+
+			MagicConfigCache.putConfig(config);
 		}
 
 	}

@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.mina.core.session.IoSession;
+
 import com.aim.duty.duty_base.common.ErrorCode;
 import com.aim.duty.duty_base.entity.base.AbstractProp;
 import com.aim.duty.duty_base.service.prop.PropService;
 import com.aim.duty.duty_build.cache.RoleCache;
+import com.aim.duty.duty_build.cache.SessionCache;
 import com.aim.duty.duty_build_entity.bo.Brick;
 import com.aim.duty.duty_build_entity.bo.Role;
 import com.aim.duty.duty_build_entity.bo.Wall;
@@ -48,34 +51,40 @@ public class BuildServiceImpl implements BuildService {
 	}
 
 	@Override
-	public SC.Builder createRole(String account, String name) {
+	public SC.Builder createRole(String account, String name,IoSession session) {
 		// TODO Auto-generated method stub
 		SC.Builder sc = SC.newBuilder();
 		SC_CreateRole.Builder sc_createArchitectBuilder = SC_CreateRole.newBuilder();
 
-		Role architect = this.initArchitect();
-		this.initWall(architect);
-		this.initRoom(architect);
-		RoleCache.putRole(architect);
+		Role role = this.initRole(account,name);
+		this.initWall(role);
+		this.initRoom(role);
+		RoleCache.putRole(role);
+		session.setAttribute("roleId",role.getId());
+		SessionCache.addSession(role.getId(), session);
 
 		sc_createArchitectBuilder.setSuccess(ErrorCode.SUCCESS);
 		return sc.setProtocal(ProtocalId.CREATE_ROLE).setData(sc_createArchitectBuilder.build().toByteString());
 	}
 
-	private Role initArchitect() {
-		Role architect = new Role();
-		architect.setId(RoleCache.getRoleId());
-		return architect;
+	private Role initRole(String account,String name) {
+		Role role = new Role();
+		role.setId(RoleCache.getRoleId());
+		role.setAccount(account);
+		role.setName(name);
+		return role;
 	}
 
-	private Wall initWall(Role architect) {
+	private Wall initWall(Role role) {
 		Wall wall = new Wall();
 		wall.setCapacity(30);
+		role.setWall(wall);
 		return wall;
 	}
 
-	private Room initRoom(Role architect) {
+	private Room initRoom(Role role) {
 		Room room = new Room();
+		role.setRoom(room);
 		return room;
 	}
 
@@ -174,12 +183,12 @@ public class BuildServiceImpl implements BuildService {
 	}
 
 	@Override
-	public SC.Builder chooseMaterial(Role architect, int brickSourceId, int brickSourceNum) {
+	public SC.Builder chooseMaterial(Role role, int brickSourceId, int brickSourceNum) {
 		// TODO Auto-generated method stub
 		SC.Builder sc = SC.newBuilder();
 		SC_ChooseMaterial.Builder sc_chooseMaterial = SC_ChooseMaterial.newBuilder();
 
-		Room room = architect.getRoom();
+		Room room = role.getRoom();
 		room.setBrickNum(brickSourceNum);
 		room.setBrickSourceId(brickSourceId);
 		return sc.setProtocal(ProtocalId.CHOOSE_MATERIAL).setData(
@@ -215,6 +224,7 @@ public class BuildServiceImpl implements BuildService {
 						.setMagicId(m.getMagicId()).setValue(m.getValue()).build());
 			}
 
+			scGetResultBuilder.addBricks(scBrickBuilder);
 		}
 
 		return sc.setProtocal(ProtocalId.GET_RESULT).setData(
