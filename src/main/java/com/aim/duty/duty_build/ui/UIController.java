@@ -10,18 +10,25 @@ public class UIController extends Observable {
 	public void setMainFrame(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
 	}
-	
-	public void start(){
+
+	public void start() {
 		this.addObserver(mainFrame);
+		mainFrame.initCode();
 		mainFrame.start(mainFrame);
-		
 	}
-	
-	public void addRole(int roleId,String name){
+
+	public void addRole() {
 		List list = new ArrayList();
 		list.add("addRole");
-		list.add(roleId);
-		list.add(name);
+		this.setChanged();
+
+		this.notifyObservers(list);
+	}
+
+	public void chooseMaterial() {
+		// TODO Auto-generated method stub
+		List list = new ArrayList<>();
+		list.add("chooseMaterial");
 		this.setChanged();
 		
 		this.notifyObservers(list);

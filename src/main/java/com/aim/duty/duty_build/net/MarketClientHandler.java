@@ -14,7 +14,7 @@ import com.aim.game_base.net.IoHandlerAdapter;
  * 消息处理器
  * 
  */
-public class ClientHandler extends IoHandlerAdapter {
+public class MarketClientHandler extends IoHandlerAdapter {
 
 	// 当一个客户端连结进入时
 	@Override

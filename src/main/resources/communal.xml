@@ -15,4 +15,5 @@
 	</bean>
 	<bean id="mainFrame" class="com.aim.duty.duty_build.ui.MainFrame"></bean>
 	<bean id="marketServer" class="com.aim.game_base.net.WanClient"></bean>
+	<bean id="buildServer" class="com.aim.game_base.net.WanClient"></bean>
 </beans>

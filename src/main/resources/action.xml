@@ -8,10 +8,17 @@
     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
 
-	<bean id="navigation" class="com.aim.duty.duty_build.navigation.ActionNavigation" 
-		
-		/>
+	<bean id="navigation" class="com.aim.duty.duty_build.navigation.ActionNavigation"
+	 p:buildCreateRoleAction-ref="buildCreateRoleAction" />
 
+	<bean id="buildCreateRoleAction" class="com.aim.duty.duty_build.module.build.action.BuildCreateRoleAction" p:buildService-ref="buildService"></bean>
+	<bean id="buildShowWallAction" class="com.aim.duty.duty_build.module.build.action.BuildShowWallAction" p:buildService-ref="buildService"></bean>
+	<bean id="buildShowBrickAction" class="com.aim.duty.duty_build.module.build.action.BuildShowBrickAction" p:buildService-ref="buildService"></bean>
+	<bean id="buildAddBrickToWallAction" class="com.aim.duty.duty_build.module.build.action.BuildAddBrickToWallAction" p:buildService-ref="buildService"></bean>
+	<bean id="buildAddMagicAction" class="com.aim.duty.duty_build.module.build.action.BuildAddMagicAction" p:buildService-ref="buildService"></bean>
+	<bean id="buildGetResultAction" class="com.aim.duty.duty_build.module.build.action.BuildGetResultAction" p:buildService-ref="buildService"></bean>
+	<bean id="buildChooseMaterialAction" class="com.aim.duty.duty_build.module.build.action.BuildChooseMaterialAction" p:buildService-ref="buildService"></bean>
+	<bean id="buildShowBagAction" class="com.aim.duty.duty_build.module.build.action.BuildShowBagAction" p:buildService-ref="buildService"></bean>
 
 
 </beans>

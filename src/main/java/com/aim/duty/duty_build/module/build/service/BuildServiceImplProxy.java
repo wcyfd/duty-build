@@ -1,7 +1,10 @@
 package com.aim.duty.duty_build.module.build.service;
 
+import java.util.List;
+
 import com.aim.duty.duty_build.ui.UIController;
 import com.aim.duty.duty_build_entity.bo.Role;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.CS_GetResult.Brick;
 import com.aim.game_base.entity.net.base.Protocal.SC;
 import com.aim.game_base.entity.net.base.Protocal.SC.Builder;
 
@@ -13,24 +16,17 @@ public class BuildServiceImplProxy implements BuildService {
 		this.buildService = buildService;
 	}
 
-	private UIController uiController;
-
-	public void setUiController(UIController uiController) {
-		this.uiController = uiController;
-	}
-
 	@Override
 	public void serverInit() {
 		// TODO Auto-generated method stub
 		buildService.serverInit();
-		uiController.start();
 	}
 
 	@Override
 	public SC.Builder createRole(String account, String name) {
 		// TODO Auto-generated method stub
 		SC.Builder builder = buildService.createRole(account, name);
-		uiController.addRole(1, name);
+		
 		return builder;
 	}
 
@@ -65,9 +61,9 @@ public class BuildServiceImplProxy implements BuildService {
 	}
 
 	@Override
-	public SC.Builder getResult(Role architect, int brickCount) {
+	public Builder getResult(Role role, List<Brick> bricks) {
 		// TODO Auto-generated method stub
-		return buildService.getResult(architect, brickCount);
+		return buildService.getResult(role, bricks);
 	}
 	
 	@Override
