@@ -26,7 +26,7 @@ public class BuildGetResultAction implements ActionSupport {
 		try {
 			CS_GetResult cs = CS_GetResult.parseFrom(data);
 			Role role = RoleCache.getRoleBySession(session);
-			SC.Builder builder = buildService.getResult(role, cs.getBricksList());
+			SC builder = buildService.getResult(role, cs.getBricksList());
 			if (session != null) {
 				session.write(builder);
 			}

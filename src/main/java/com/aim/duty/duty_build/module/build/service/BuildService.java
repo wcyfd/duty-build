@@ -11,19 +11,19 @@ import com.aim.game_base.entity.net.base.Protocal.SC;
 public interface BuildService {
 	public void serverInit();
 
-	public SC.Builder createRole(String account, String name,IoSession session);
+	public SC createRole(String account, String name,IoSession session);
 
-	public SC.Builder showWall(Role role);
+	public SC showWall(Role role);
 
-	public SC.Builder showBrickByIndex(Role role, int index);
+	public SC showBrickByIndex(Role role, int index);
 
-	public SC.Builder addBrickToWall(Role role, int indexAtWall, int propId);
+	public SC addBrickToWall(Role role, int indexAtWall, int propId);
 
-	public SC.Builder addMagic(Role role, int propId, int magicId);
+	public SC addMagic(Role role, int propId, int magicId);
 
-	public SC.Builder chooseMaterial(Role role, int brickSourceId, int brickSourceNum);
+	public SC chooseMaterial(Role role, int brickSourceId, int brickSourceNum);
 
-	public SC.Builder getResult(Role role, List<CS_GetResult.Brick> bricks);
+	public SC getResult(Role role, List<CS_GetResult.Brick> bricks);
 
-	public SC.Builder showBag(Role role);
+	public SC showBag(Role role);
 }

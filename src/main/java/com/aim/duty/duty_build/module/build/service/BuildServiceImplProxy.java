@@ -25,51 +25,50 @@ public class BuildServiceImplProxy implements BuildService {
 	}
 
 	@Override
-	public SC.Builder createRole(String account, String name,IoSession session) {
+	public SC createRole(String account, String name, IoSession session) {
 		// TODO Auto-generated method stub
-		SC.Builder builder = buildService.createRole(account, name,session);
-		
-		return builder;
+		return buildService.createRole(account, name, session);
+
 	}
 
 	@Override
-	public SC.Builder showWall(Role role) {
+	public SC showWall(Role role) {
 		// TODO Auto-generated method stub
 		return buildService.showWall(role);
 	}
 
 	@Override
-	public SC.Builder showBrickByIndex(Role role, int index) {
+	public SC showBrickByIndex(Role role, int index) {
 		// TODO Auto-generated method stub
 		return buildService.showBrickByIndex(role, index);
 	}
 
 	@Override
-	public SC.Builder addBrickToWall(Role role, int indexAtWall, int propId) {
+	public SC addBrickToWall(Role role, int indexAtWall, int propId) {
 		// TODO Auto-generated method stub
 		return buildService.addBrickToWall(role, indexAtWall, propId);
 	}
 
 	@Override
-	public SC.Builder addMagic(Role role, int propId, int magicId) {
+	public SC addMagic(Role role, int propId, int magicId) {
 		// TODO Auto-generated method stub
 		return buildService.addMagic(role, propId, magicId);
 	}
 
 	@Override
-	public SC.Builder chooseMaterial(Role architect, int brickSourceId, int brickSourceNum) {
+	public SC chooseMaterial(Role architect, int brickSourceId, int brickSourceNum) {
 		// TODO Auto-generated method stub
 		return buildService.chooseMaterial(architect, brickSourceId, brickSourceNum);
 	}
 
 	@Override
-	public Builder getResult(Role role, List<Brick> bricks) {
+	public SC getResult(Role role, List<Brick> bricks) {
 		// TODO Auto-generated method stub
 		return buildService.getResult(role, bricks);
 	}
-	
+
 	@Override
-	public Builder showBag(Role role) {
+	public SC showBag(Role role) {
 		// TODO Auto-generated method stub
 		return buildService.showBag(role);
 	}

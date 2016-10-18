@@ -25,7 +25,7 @@ public class BuildAddMagicAction implements ActionSupport {
 		try {
 			CS_AddMagic cs = CS_AddMagic.parseFrom(data);
 			Role role = RoleCache.getRoleBySession(session);
-			SC.Builder builder = buildService.addMagic(role, cs.getPropId(), cs.getMagicId());
+			SC builder = buildService.addMagic(role, cs.getPropId(), cs.getMagicId());
 			if (session != null) {
 				session.write(builder);
 			}

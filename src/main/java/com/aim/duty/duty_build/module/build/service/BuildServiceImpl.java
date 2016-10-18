@@ -51,23 +51,23 @@ public class BuildServiceImpl implements BuildService {
 	}
 
 	@Override
-	public SC.Builder createRole(String account, String name,IoSession session) {
+	public SC createRole(String account, String name, IoSession session) {
 		// TODO Auto-generated method stub
 		SC.Builder sc = SC.newBuilder();
 		SC_CreateRole.Builder sc_createArchitectBuilder = SC_CreateRole.newBuilder();
 
-		Role role = this.initRole(account,name);
+		Role role = this.initRole(account, name);
 		this.initWall(role);
 		this.initRoom(role);
 		RoleCache.putRole(role);
-		session.setAttribute("roleId",role.getId());
+		session.setAttribute("roleId", role.getId());
 		SessionCache.addSession(role.getId(), session);
 
 		sc_createArchitectBuilder.setSuccess(ErrorCode.SUCCESS);
-		return sc.setProtocal(ProtocalId.CREATE_ROLE).setData(sc_createArchitectBuilder.build().toByteString());
+		return sc.setProtocal(ProtocalId.CREATE_ROLE).setData(sc_createArchitectBuilder.build().toByteString()).build();
 	}
 
-	private Role initRole(String account,String name) {
+	private Role initRole(String account, String name) {
 		Role role = new Role();
 		role.setId(RoleCache.getRoleId());
 		role.setAccount(account);
@@ -89,7 +89,7 @@ public class BuildServiceImpl implements BuildService {
 	}
 
 	@Override
-	public SC.Builder showWall(Role role) {
+	public SC showWall(Role role) {
 		// TODO Auto-generated method stub
 		SC.Builder sc = SC.newBuilder();
 		SC_ShowWall.Builder scShowBuilder = SC_ShowWall.newBuilder();
@@ -104,8 +104,6 @@ public class BuildServiceImpl implements BuildService {
 
 			SC_ShowWall.Brick.Builder scBrickBuilder = SC_ShowWall.Brick.newBuilder();
 			Map<Integer, SC_ShowWall.Magic> magics = new HashMap<>();
-			scBrickBuilder.putAllMagics(magics).setMineId(entrySet.getValue().getMineId())
-					.setId(entrySet.getValue().getId());
 
 			for (Magic m : entrySet.getValue().getMagicMap().values()) {
 				magics.put(
@@ -113,16 +111,18 @@ public class BuildServiceImpl implements BuildService {
 						SC_ShowWall.Magic.newBuilder().setDuration(m.getDuration()).setValue(m.getValue())
 								.setMagicId(m.getMagicId()).build());
 			}
+			scBrickBuilder.putAllMagics(magics).setMineId(entrySet.getValue().getMineId())
+					.setId(entrySet.getValue().getId());
 
 			bricks.put(entrySet.getKey(), scBrickBuilder.build());
 		}
 
-		return sc.setProtocal(ProtocalId.SHOW_WALL).setData(scShowBuilder.build().toByteString());
+		return sc.setProtocal(ProtocalId.SHOW_WALL).setData(scShowBuilder.build().toByteString()).build();
 
 	}
 
 	@Override
-	public SC.Builder showBrickByIndex(Role role, int propId) {
+	public SC showBrickByIndex(Role role, int propId) {
 		// TODO Auto-generated method stub
 		SC.Builder sc = SC.newBuilder();
 		SC_ShowBrick.Builder scShowBrick = SC_ShowBrick.newBuilder();
@@ -130,28 +130,29 @@ public class BuildServiceImpl implements BuildService {
 		Brick brick = (Brick) propMap.get(propId);
 		scShowBrick.setMineId(brick.getMineId());
 		Map<Integer, SC_ShowBrick.Magic> scMagics = new HashMap<>();
-		scShowBrick.putAllMagics(scMagics);
 		for (Magic m : brick.getMagicMap().values()) {
 			scMagics.put(
 					m.getMagicId(),
 					SC_ShowBrick.Magic.newBuilder().setDuration(m.getDuration()).setMagicId(m.getMagicId())
 							.setValue(m.getValue()).build());
 		}
+		scShowBrick.putAllMagics(scMagics);
 
-		return sc.setProtocal(ProtocalId.SHOW_BRICK).setData(scShowBrick.build().toByteString());
+		return sc.setProtocal(ProtocalId.SHOW_BRICK).setData(scShowBrick.build().toByteString()).build();
 	}
 
 	@Override
-	public SC.Builder addBrickToWall(Role role, int indexAtWall, int propId) {
+	public SC addBrickToWall(Role role, int indexAtWall, int propId) {
 		// TODO Auto-generated method stub
 		SC.Builder sc = SC.newBuilder();
 		SC_AddBrickToWall.Builder scAddBrickToWallBuilder = SC_AddBrickToWall.newBuilder();
 		Map<Integer, AbstractProp> propMap = role.getPropMap();
-		Brick prop = (Brick) propMap.get(propId);
 
 		Wall wall = role.getWall();
 		Map<Integer, Brick> wallBrickMap = wall.getBrickMap();
 		Brick b = wallBrickMap.get(indexAtWall);
+
+		Brick prop = (Brick) propMap.get(propId);
 
 		if (b != null) {
 			wallBrickMap.remove(indexAtWall);
@@ -160,12 +161,12 @@ public class BuildServiceImpl implements BuildService {
 
 		wallBrickMap.put(indexAtWall, prop);
 		prop.setPosition(1);
-		return sc.setProtocal(ProtocalId.ADD_BRICK_TO_WALL).setData(
-				scAddBrickToWallBuilder.setSuccess(ErrorCode.SUCCESS).build().toByteString());
+		return sc.setProtocal(ProtocalId.ADD_BRICK_TO_WALL)
+				.setData(scAddBrickToWallBuilder.setSuccess(ErrorCode.SUCCESS).build().toByteString()).build();
 	}
 
 	@Override
-	public SC.Builder addMagic(Role role, int propId, int magicId) {
+	public SC addMagic(Role role, int propId, int magicId) {
 		// TODO Auto-generated method stub
 		SC.Builder sc = SC.newBuilder();
 		SC_AddMagic.Builder scAddMagicBuilder = SC_AddMagic.newBuilder();
@@ -177,13 +178,13 @@ public class BuildServiceImpl implements BuildService {
 		magic.setDuration(30);
 
 		prop.getMagicMap().put(magic.getMagicId(), magic);
-		return sc.setProtocal(ProtocalId.ADD_MAGIC).setData(
-				scAddMagicBuilder.setSuccess(ErrorCode.SUCCESS).build().toByteString());
+		return sc.setProtocal(ProtocalId.ADD_MAGIC)
+				.setData(scAddMagicBuilder.setSuccess(ErrorCode.SUCCESS).build().toByteString()).build();
 
 	}
 
 	@Override
-	public SC.Builder chooseMaterial(Role role, int brickSourceId, int brickSourceNum) {
+	public SC chooseMaterial(Role role, int brickSourceId, int brickSourceNum) {
 		// TODO Auto-generated method stub
 		SC.Builder sc = SC.newBuilder();
 		SC_ChooseMaterial.Builder sc_chooseMaterial = SC_ChooseMaterial.newBuilder();
@@ -191,12 +192,12 @@ public class BuildServiceImpl implements BuildService {
 		Room room = role.getRoom();
 		room.setBrickNum(brickSourceNum);
 		room.setBrickSourceId(brickSourceId);
-		return sc.setProtocal(ProtocalId.CHOOSE_MATERIAL).setData(
-				sc_chooseMaterial.setSuccess(ErrorCode.SUCCESS).build().toByteString());
+		return sc.setProtocal(ProtocalId.CHOOSE_MATERIAL)
+				.setData(sc_chooseMaterial.setSuccess(ErrorCode.SUCCESS).build().toByteString()).build();
 	}
 
 	@Override
-	public SC.Builder getResult(Role role, List<CS_GetResult.Brick> bricksList) {
+	public SC getResult(Role role, List<CS_GetResult.Brick> bricksList) {
 		// TODO Auto-generated method stub
 		SC.Builder sc = SC.newBuilder();
 		SC_GetResult.Builder scGetResultBuilder = SC_GetResult.newBuilder();
@@ -207,12 +208,9 @@ public class BuildServiceImpl implements BuildService {
 			b.setMineId(role.getRoom().getBrickSourceId());
 
 			SC_GetResult.Brick.Builder scBrickBuilder = SC_GetResult.Brick.newBuilder();
-			scBrickBuilder.setId(b.getId());
-			scBrickBuilder.setMineId(b.getMineId());
+			scBrickBuilder.setId(b.getId()).setMineId(b.getMineId());
 
 			Map<Integer, SC_GetResult.Brick.Magic> scMagics = new HashMap<>();
-			scBrickBuilder.putAllMagics(scMagics);
-
 			for (CS_GetResult.Brick.Magic magic : csBrick.getMagicsMap().values()) {
 				Magic m = new Magic();
 				m.setDuration(magic.getDuration());
@@ -224,32 +222,30 @@ public class BuildServiceImpl implements BuildService {
 						.setMagicId(m.getMagicId()).setValue(m.getValue()).build());
 			}
 
+			scBrickBuilder.putAllMagics(scMagics);
+
 			scGetResultBuilder.addBricks(scBrickBuilder);
+			role.getPropMap().put(b.getId(), b);
 		}
 
-		return sc.setProtocal(ProtocalId.GET_RESULT).setData(
-				scGetResultBuilder.setSuccess(ErrorCode.SUCCESS).build().toByteString());
+		return sc.setProtocal(ProtocalId.GET_RESULT)
+				.setData(scGetResultBuilder.setSuccess(ErrorCode.SUCCESS).build().toByteString()).build();
 
 	}
 
 	@Override
-	public SC.Builder showBag(Role role) {
+	public SC showBag(Role role) {
 		// TODO Auto-generated method stub
 		SC.Builder sc = SC.newBuilder();
 		SC_ShowBag.Builder scShowBagBuilder = SC_ShowBag.newBuilder();
 
 		Map<Integer, SC_ShowBag.Brick> bricks = new HashMap<>();
-		scShowBagBuilder.putAllBricks(bricks);
 
 		Map<Integer, AbstractProp> propMap = role.getPropMap();
 		for (AbstractProp p : propMap.values()) {
 			Brick b = (Brick) p;
 
-			SC_ShowBag.Brick.Builder scBrick = SC_ShowBag.Brick.newBuilder();
-			scBrick.setMineId(b.getMineId()).setId(b.getId());
 			Map<Integer, SC_ShowBag.Magic> magics = new HashMap<>();
-			scBrick.putAllMagics(magics);
-
 			for (Magic m : b.getMagicMap().values()) {
 				magics.put(
 						m.getMagicId(),
@@ -257,9 +253,12 @@ public class BuildServiceImpl implements BuildService {
 								.setMagicId(m.getMagicId()).build());
 			}
 
-			bricks.put(b.getId(), scBrick.build());
+			bricks.put(b.getId(),
+					SC_ShowBag.Brick.newBuilder().setMineId(b.getMineId()).setId(b.getId()).putAllMagics(magics)
+							.build());
 		}
-		return sc.setProtocal(ProtocalId.SHOW_BAG).setData(scShowBagBuilder.build().toByteString());
+		return sc.setProtocal(ProtocalId.SHOW_BAG)
+				.setData(scShowBagBuilder.putAllBricks(bricks).build().toByteString()).build();
 	}
 
 }

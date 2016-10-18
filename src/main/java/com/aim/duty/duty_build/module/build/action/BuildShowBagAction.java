@@ -25,7 +25,7 @@ public class BuildShowBagAction implements ActionSupport {
 		try {
 			CS_ShowBag cs = CS_ShowBag.parseFrom(data);
 			Role role = RoleCache.getRoleBySession(session);
-			SC.Builder builder = buildService.showBag(role);
+			SC builder = buildService.showBag(role);
 			if (session != null) {
 				session.write(builder);
 			}

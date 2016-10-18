@@ -5,6 +5,7 @@ import org.apache.mina.core.session.IoSession;
 import com.aim.duty.duty_base.common.ErrorCode;
 import com.aim.duty.duty_build.ui.UIController;
 import com.aim.duty.duty_build_entity.navigation.ProtocalId;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_AddBrickToWall;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_ChooseMaterial;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_CreateRole;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_GetResult;
@@ -61,7 +62,6 @@ public class BuildClientHandler extends IoHandlerAdapter {
 	// 当客户端发送的消息到达时
 	@Override
 	public void messageReceived(IoSession session, Object messageObj) throws Exception {
-		System.out.println(messageObj);
 		SC sc = (SC) messageObj;
 		int protocal = sc.getProtocal();
 		ByteString data = sc.getData();
@@ -78,6 +78,12 @@ public class BuildClientHandler extends IoHandlerAdapter {
 			SC_GetResult scData = SC_GetResult.parseFrom(data);
 			if (scData.getSuccess() == ErrorCode.SUCCESS) {
 				uiController.getResult(scData);
+			}
+		}
+		else if(protocal==ProtocalId.ADD_BRICK_TO_WALL){
+			SC_AddBrickToWall scData = SC_AddBrickToWall.parseFrom(data);
+			if(scData.getSuccess()==ErrorCode.SUCCESS){
+				uiController.addBrickIntoWall(scData);
 			}
 		}
 

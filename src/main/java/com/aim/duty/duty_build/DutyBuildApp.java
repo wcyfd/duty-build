@@ -8,6 +8,7 @@ import com.aim.duty.duty_build.cache.config.OreConfigCache;
 import com.aim.duty.duty_build.cache.config.PlayCountConfigCache;
 import com.aim.duty.duty_build.module.build.service.BuildService;
 import com.aim.duty.duty_build.navigation.ActionNavigation;
+import com.aim.duty.duty_build.navigation.ProtocalNavigation;
 import com.aim.duty.duty_build.net.BuildClientHandler;
 import com.aim.duty.duty_build.net.MarketClientHandler;
 import com.aim.duty.duty_build.net.ServerHandler;
@@ -34,6 +35,7 @@ public class DutyBuildApp {
 
 		CacheInit();
 		ActionNavigation.init();
+		ProtocalNavigation.init();
 
 		BuildService buildService = SpringContext.getBean("buildService");
 		buildService.serverInit();

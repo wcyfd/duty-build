@@ -1,11 +1,18 @@
 package com.aim.duty.duty_build.net;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.apache.mina.core.session.IoSession;
 
 import com.aim.duty.duty_build.navigation.ActionNavigation;
+import com.aim.duty.duty_build.navigation.ProtocalNavigation;
 import com.aim.game_base.entity.net.base.Protocal.CS;
+import com.aim.game_base.entity.net.base.Protocal.SC;
 import com.aim.game_base.navigation.ActionSupport;
 import com.aim.game_base.net.IoHandlerAdapter;
+import com.aim.game_base.net.ProtobufMessagePrinter;
+import com.google.protobuf.ByteString;
 
 //import byCodeGame.game.cache.local.RoleCache;
 //import byCodeGame.game.entity.bo.Role;
@@ -144,5 +151,10 @@ public class ServerHandler extends IoHandlerAdapter {
 //		PrintToClientMsg.printIOBuffer(roleId, msg);
 //		// }
 //		//
+		
+		SC sc = (SC)message;
+		Class<?> clazz = ProtocalNavigation.getClassByProtocalId(sc.getProtocal());
+		System.out.println("服务器回写指令号"+sc.getProtocal());
+		ProtobufMessagePrinter.print(sc, clazz);
 	}
 }

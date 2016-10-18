@@ -25,7 +25,7 @@ public class BuildShowWallAction implements ActionSupport {
 		try {
 			CS_ShowWall cs = CS_ShowWall.parseFrom(data);
 			Role role = RoleCache.getRoleBySession(session);
-			SC.Builder builder = buildService.showWall(role);
+			SC builder = buildService.showWall(role);
 			if (session != null) {
 				session.write(builder);
 			}

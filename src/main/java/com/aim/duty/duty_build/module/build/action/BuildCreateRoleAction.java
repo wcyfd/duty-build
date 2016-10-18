@@ -24,7 +24,7 @@ public class BuildCreateRoleAction implements ActionSupport {
 			CS_CreateRole cs = CS_CreateRole.parseFrom(data);
 			String account = cs.getAccount();
 			String name = cs.getName();
-			SC.Builder builder = buildService.createRole(account, name,session);
+			SC builder = buildService.createRole(account, name,session);
 			if (session != null) {
 				session.write(builder);
 			}

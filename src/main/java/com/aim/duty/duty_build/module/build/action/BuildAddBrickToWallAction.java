@@ -26,9 +26,9 @@ public class BuildAddBrickToWallAction implements ActionSupport {
 		try {
 			CS_AddBrickToWall cs = CS_AddBrickToWall.parseFrom(data);
 			Role role = RoleCache.getRoleBySession(session);
-			SC.Builder builder = buildService.addBrickToWall(role, cs.getIndexAtWall(), cs.getPropId());
+			SC sc = buildService.addBrickToWall(role, cs.getIndexAtWall(), cs.getPropId());
 			if (session != null) {
-				session.write(builder);
+				session.write(sc);
 			}
 
 		} catch (InvalidProtocolBufferException e) {

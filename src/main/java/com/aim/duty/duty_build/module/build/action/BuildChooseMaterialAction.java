@@ -27,7 +27,7 @@ public class BuildChooseMaterialAction implements ActionSupport {
 		try {
 			CS_ChooseMaterial cs = CS_ChooseMaterial.parseFrom(data);
 			Role role = RoleCache.getRoleBySession(session);
-			SC.Builder builder = buildService.chooseMaterial(role, cs.getBrickSourceId(), cs.getBrickSourceNum());
+			SC builder = buildService.chooseMaterial(role, cs.getBrickSourceId(), cs.getBrickSourceNum());
 			if (session != null) {
 				session.write(builder);
 			}
