@@ -2,13 +2,14 @@ package com.aim.duty.duty_build.net;
 
 import org.apache.mina.core.session.IoSession;
 
-import com.aim.duty.duty_base.common.ErrorCode;
 import com.aim.duty.duty_build.ui.UIController;
-import com.aim.duty.duty_build_entity.navigation.ProtocalId;
-import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_AddBrickToWall;
+import com.aim.duty.duty_build_entity.common.BuildErrorCode;
+import com.aim.duty.duty_build_entity.navigation.BuildProtocalId;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_ChooseMaterial;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_CreateRole;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_GetResult;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_GetWallValue;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_ReplaceBrick;
 import com.aim.game_base.entity.net.base.Protocal.SC;
 import com.aim.game_base.net.IoHandlerAdapter;
 import com.aim.game_base.net.SpringContext;
@@ -66,25 +67,27 @@ public class BuildClientHandler extends IoHandlerAdapter {
 		int protocal = sc.getProtocal();
 		ByteString data = sc.getData();
 		UIController uiController = SpringContext.getBean("uiController");
-		if (protocal == ProtocalId.CREATE_ROLE) {
+		if (protocal == BuildProtocalId.CREATE_ROLE) {
 			SC_CreateRole scData = SC_CreateRole.parseFrom(data);
-			if (scData.getSuccess() == ErrorCode.SUCCESS)
+			if (scData.getSuccess() == BuildErrorCode.SUCCESS)
 				uiController.addRole();
-		} else if (protocal == ProtocalId.CHOOSE_MATERIAL) {
+		} else if (protocal == BuildProtocalId.CHOOSE_MATERIAL) {
 			SC_ChooseMaterial scData = SC_ChooseMaterial.parseFrom(data);
-			if (scData.getSuccess() == ErrorCode.SUCCESS)
+			if (scData.getSuccess() == BuildErrorCode.SUCCESS)
 				uiController.chooseMaterial();
-		} else if (protocal == ProtocalId.GET_RESULT) {
+		} else if (protocal == BuildProtocalId.GET_RESULT) {
 			SC_GetResult scData = SC_GetResult.parseFrom(data);
-			if (scData.getSuccess() == ErrorCode.SUCCESS) {
+			if (scData.getSuccess() == BuildErrorCode.SUCCESS) {
 				uiController.getResult(scData);
 			}
-		}
-		else if(protocal==ProtocalId.ADD_BRICK_TO_WALL){
-			SC_AddBrickToWall scData = SC_AddBrickToWall.parseFrom(data);
-			if(scData.getSuccess()==ErrorCode.SUCCESS){
+		} else if (protocal == BuildProtocalId.REPLACE_BRICK) {
+			SC_ReplaceBrick scData = SC_ReplaceBrick.parseFrom(data);
+			if (scData.getSuccess() == BuildErrorCode.SUCCESS) {
 				uiController.addBrickIntoWall(scData);
 			}
+		} else if (protocal == BuildProtocalId.GET_WALL_VALUE) {
+			SC_GetWallValue scData = SC_GetWallValue.parseFrom(data);
+			uiController.getWallValue(scData);
 		}
 
 		// Message message = (Message) messageObj;

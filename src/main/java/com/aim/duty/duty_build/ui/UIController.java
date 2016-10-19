@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
-import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_AddBrickToWall;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_GetResult;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_GetWallValue;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_ReplaceBrick;
 
 public class UIController extends Observable {
 	private MainFrame mainFrame;
@@ -48,12 +49,22 @@ public class UIController extends Observable {
 		
 	}
 
-	public void addBrickIntoWall(SC_AddBrickToWall scData) {
+	public void addBrickIntoWall(SC_ReplaceBrick scData) {
 		// TODO Auto-generated method stub
 		List list = new ArrayList<>();
 		list.add("addBrickIntoWall");
 		list.add(scData);
 		this.setChanged();
+		
+		this.notifyObservers(list);
+	}
+
+	public void getWallValue(SC_GetWallValue scData) {
+		// TODO Auto-generated method stub
+		List list = new ArrayList<>();
+		list.add("getWallValue");
+		list.add(scData);		
+		this.setChanged();	
 		
 		this.notifyObservers(list);
 	}

@@ -9,25 +9,31 @@
 
 
 	<bean id="navigation" class="com.aim.duty.duty_build.navigation.ActionNavigation"
-	 p:buildCreateRoleAction-ref="buildCreateRoleAction" 
-	 p:buildShowWallAction-ref="buildShowWallAction" 
-	 p:buildShowBrickAction-ref="buildShowBrickAction" 
-	 p:buildAddBrickToWallAction-ref="buildAddBrickToWallAction" 
-	 p:buildAddMagicAction-ref="buildAddMagicAction" 
-	 p:buildGetResultAction-ref="buildGetResultAction" 
-	 p:buildChooseMaterialAction-ref="buildChooseMaterialAction" 
-	 p:buildShowBagAction-ref="buildShowBagAction" 
-	 
+		p:buildCreateRoleAction-ref="buildCreateRoleAction" 
+		p:buildShowWallAction-ref="buildShowWallAction" 
+		p:buildShowBrickAction-ref="buildShowBrickAction" 
+		p:buildReplaceBrickAction-ref="buildReplaceBrickAction" 
+		p:buildAddMagicAction-ref="buildAddMagicAction" 
+		p:buildGetResultAction-ref="buildGetResultAction" 
+		p:buildChooseMaterialAction-ref="buildChooseMaterialAction" 
+		p:buildShowBagAction-ref="buildShowBagAction" 
+		p:buildGetWallValueAction-ref="buildGetWallValueAction"
+		
+		p:tradeBuyPropAction-ref="tradeBuyPropAction"
+		p:tradeSalePropAction-ref="tradeSalePropAction"
 	 />
 
 	<bean id="buildCreateRoleAction" class="com.aim.duty.duty_build.module.build.action.BuildCreateRoleAction" p:buildService-ref="buildService"></bean>
 	<bean id="buildShowWallAction" class="com.aim.duty.duty_build.module.build.action.BuildShowWallAction" p:buildService-ref="buildService"></bean>
 	<bean id="buildShowBrickAction" class="com.aim.duty.duty_build.module.build.action.BuildShowBrickAction" p:buildService-ref="buildService"></bean>
-	<bean id="buildAddBrickToWallAction" class="com.aim.duty.duty_build.module.build.action.BuildAddBrickToWallAction" p:buildService-ref="buildService"></bean>
+	<bean id="buildReplaceBrickAction" class="com.aim.duty.duty_build.module.build.action.BuildReplaceBrickAction" p:buildService-ref="buildService"></bean>
 	<bean id="buildAddMagicAction" class="com.aim.duty.duty_build.module.build.action.BuildAddMagicAction" p:buildService-ref="buildService"></bean>
 	<bean id="buildGetResultAction" class="com.aim.duty.duty_build.module.build.action.BuildGetResultAction" p:buildService-ref="buildService"></bean>
 	<bean id="buildChooseMaterialAction" class="com.aim.duty.duty_build.module.build.action.BuildChooseMaterialAction" p:buildService-ref="buildService"></bean>
 	<bean id="buildShowBagAction" class="com.aim.duty.duty_build.module.build.action.BuildShowBagAction" p:buildService-ref="buildService"></bean>
+	<bean id="buildGetWallValueAction" class="com.aim.duty.duty_build.module.build.action.BuildGetWallValueAction" p:buildService-ref="buildService"></bean>
 
+	<bean id="tradeBuyPropAction" class="com.aim.duty.duty_build.module.trade.action.TradeBuyPropAction" p:tradeService-ref="tradeService"></bean>
+	<bean id="tradeSalePropAction" class="com.aim.duty.duty_build.module.trade.action.TradeSalePropAction" p:tradeService-ref="tradeService"></bean>
 
 </beans>

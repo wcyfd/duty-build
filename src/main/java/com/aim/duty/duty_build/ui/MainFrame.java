@@ -14,23 +14,25 @@ import java.util.Observer;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.event.ListDataEvent;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 import com.aim.duty.duty_build.cache.config.MagicConfigCache;
 import com.aim.duty.duty_build.cache.config.OreConfigCache;
 import com.aim.duty.duty_build.cache.config.PlayCountConfigCache;
 import com.aim.duty.duty_build.ui.data.RoleData;
-import com.aim.duty.duty_build_entity.navigation.ProtocalId;
-import com.aim.duty.duty_build_entity.protobuf.protocal.Build.CS_AddBrickToWall;
+import com.aim.duty.duty_build_entity.navigation.BuildProtocalId;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.CS_ChooseMaterial;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.CS_CreateRole;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.CS_GetResult;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.CS_GetResult.Brick.Magic;
-import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_AddBrickToWall;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.CS_GetWallValue;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.CS_ReplaceBrick;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_GetResult;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_GetResult.Brick;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_GetWallValue;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_ReplaceBrick;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Trade.CS_BuyProp;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Trade.CS_SaleProp;
 import com.aim.game_base.entity.net.base.Protocal.CS;
 import com.aim.game_base.net.SpringContext;
 import com.aim.game_base.net.Utils;
@@ -78,6 +80,9 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
         jTable1 = new javax.swing.JTable();
         jButton4 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jTextField3 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -152,6 +157,22 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
         });
 
         jLabel4.setText("jLabel4");
+        
+        jButton5.setText("出售");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setText("购买");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        jTextField3.setText("jTextField3");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -187,7 +208,13 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3))
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -216,7 +243,10 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton2)
-                            .addComponent(jButton3))
+                            .addComponent(jButton3)
+                            .addComponent(jButton5)
+                            .addComponent(jButton6)
+                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
@@ -246,7 +276,7 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
 					// BuildService buildService =
 					// SpringContext.getBean("buildService");
 					// buildService.createRole(account, name);
-					CS cs = CS.newBuilder().setProtocal(ProtocalId.CREATE_ROLE).setData(
+					CS cs = CS.newBuilder().setProtocal(BuildProtocalId.CREATE_ROLE).setData(
 							CS_CreateRole.newBuilder().setAccount(account).setName(name).build().toByteString()).build();
 					WanClient buildClient = SpringContext.getBean("buildServer");
 					buildClient.send(cs);
@@ -261,7 +291,7 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
 		// TODO add your handling code here:
 		CS_GetResult.Builder csGetResultBuilder = CS_GetResult.newBuilder();
 		int count = Utils.getRandomNum(RoleData.num);
-		for (int i = 0; i < count; i++) {
+		for (int i = 0; i < 5; i++) {
 			CS_GetResult.Brick.Builder csBrickBuilder = CS_GetResult.Brick.newBuilder();
 			Map<Integer, CS_GetResult.Brick.Magic> csMagics = new HashMap<>();
 
@@ -279,7 +309,7 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
 			csGetResultBuilder.addBricks(csBrick);
 		}
 		WanClient buildClient = SpringContext.getBean("buildServer");
-		buildClient.send(CS.newBuilder().setProtocal(ProtocalId.GET_RESULT).setData(csGetResultBuilder.build().toByteString()).build());
+		buildClient.send(CS.newBuilder().setProtocal(BuildProtocalId.GET_RESULT).setData(csGetResultBuilder.build().toByteString()).build());
 		
 		
 	}
@@ -288,7 +318,7 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
         // TODO add your handling code here:
 		int configId = OreConfigCache.getConfigIdByIndex(jComboBox2.getSelectedIndex());
 		int playCount = PlayCountConfigCache.getCounts().get(jComboBox3.getSelectedIndex());
-		CS cs = CS.newBuilder().setProtocal(ProtocalId.CHOOSE_MATERIAL).setData(CS_ChooseMaterial.newBuilder()
+		CS cs = CS.newBuilder().setProtocal(BuildProtocalId.CHOOSE_MATERIAL).setData(CS_ChooseMaterial.newBuilder()
 				.setBrickSourceId(configId).setBrickSourceNum(playCount).build().toByteString()).build();
 		WanClient buildClient = SpringContext.getBean("buildServer");
 		buildClient.send(cs);
@@ -305,24 +335,57 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				com.aim.duty.duty_build_entity.bo.Brick b = (com.aim.duty.duty_build_entity.bo.Brick) jComboBox4.getSelectedItem();
-				
-				if (b == null) return;
-				DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+				com.aim.duty.duty_build_entity.bo.Brick b = (com.aim.duty.duty_build_entity.bo.Brick) jComboBox4
+						.getSelectedItem();
+				int propId = b != null ? b.getId() : -1;
 				int row = jTable1.getSelectedRow();
 				int column = jTable1.getSelectedColumn();
+				int indexAtWall = row * 4 + column;
+				indexAtWall = indexAtWall < 0 ? -1 : indexAtWall;
+
 				WanClient buildServer = SpringContext.getBean("buildServer");
 				buildServer.send(CS
 						.newBuilder()
-						.setProtocal(ProtocalId.ADD_BRICK_TO_WALL)
+						.setProtocal(BuildProtocalId.REPLACE_BRICK)
 						.setData(
-								CS_AddBrickToWall.newBuilder().setPropId(b.getId()).setIndexAtWall(row * 4 + column)
-										.build().toByteString()).build());
-
+								CS_ReplaceBrick.newBuilder().setPropId(propId).setIndexAtWall(indexAtWall).build()
+										.toByteString()).build());
 			}
 
 		});
     	
+    }
+    
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    	com.aim.duty.duty_build_entity.bo.Brick b = (com.aim.duty.duty_build_entity.bo.Brick) jComboBox4
+				.getSelectedItem();
+    	String str = jTextField3.getText();
+    	String[] data = str.split(" ");
+    	int num = Integer.parseInt(data[0]);
+    	int price = Integer.parseInt(data[1]);
+    	
+		WanClient buildServer = SpringContext.getBean("buildServer");
+		buildServer.send(CS
+				.newBuilder()
+				.setProtocal(BuildProtocalId.TRADE_SALE_PROP)
+				.setData(
+						CS_SaleProp.newBuilder().setPropId(b.getId()).setNum(num).setSinglePrice(price).build()
+								.toByteString()).build());
+
+    }
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+		String str = jTextField3.getText();
+		String[] data = str.split(" ");
+		int commodityId = Integer.parseInt(data[0]);
+		int num = Integer.parseInt(data[1]);
+
+		WanClient buildServer = SpringContext.getBean("buildServer");
+		buildServer.send(CS.newBuilder().setProtocal(BuildProtocalId.TRADE_BUY_PROP)
+				.setData(CS_BuyProp.newBuilder().setNum(num).setCommodityId(commodityId).build().toByteString())
+				.build());
     }
 
     /**
@@ -364,6 +427,8 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox2;
     private javax.swing.JComboBox jComboBox3;
@@ -378,6 +443,7 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
     // End of variables declaration
     
     public javax.swing.JComboBox getjComboBox1() {
@@ -471,7 +537,7 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
 					}
 				});
 				
-				
+				jTextField3.setText("1 14");
 			
 			}
 
@@ -514,42 +580,82 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
 		String message = (String) data.get(0);
 		if (message.equals("addRole")) {
 			this.addRole();
-		}
-		else if(message.equals("chooseMaterial")){
+		}else if(message.equals("chooseMaterial")){
 			this.chooseMaterial();
 		}else if(message.equals("getResult")){
 			SC_GetResult result = (SC_GetResult)data.get(1);
 			this.getResult(result);
 		}else if(message.equals("addBrickIntoWall")){
-			SC_AddBrickToWall result= (SC_AddBrickToWall)data.get(1);
-			this.addBrickToWall(result);
+			SC_ReplaceBrick result= (SC_ReplaceBrick)data.get(1);
+			this.replaceBrick(result);
+		}else if(message.equals("getWallValue")){
+			SC_GetWallValue result = (SC_GetWallValue) data.get(1);
+			this.getWallValue(result);
 		}
 	}
 
-	private void addBrickToWall(SC_AddBrickToWall result) {
+	private void getWallValue(final SC_GetWallValue result) {
+		// TODO Auto-generated method stub
+		EventQueue.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				StringBuilder sb= new StringBuilder();
+				sb.append("血量").append(result.getBlood());
+				for(SC_GetWallValue.Magic magic:result.getMagicsMap().values()){
+					String magicName = MagicConfigCache.getMagicConfigById(magic.getMagicId()).getName();
+					sb.append(magicName).append("伤害:").append(magic.getValue()).append("持续时间").append(magic.getDuration());
+				}
+				jLabel4.setText(sb.toString());
+			}
+		});
+		
+	}
+
+	private void replaceBrick(SC_ReplaceBrick result) {
 		// TODO Auto-generated method stub
 		EventQueue.invokeLater(new Runnable(){
 
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				int column = jTable1.getSelectedColumn();
+
+				DefaultComboBoxModel comboModel = (DefaultComboBoxModel) jComboBox4.getModel();
+				DefaultTableModel tableModel = (DefaultTableModel) jTable1.getModel();
+
+				com.aim.duty.duty_build_entity.bo.Brick propBrick = (com.aim.duty.duty_build_entity.bo.Brick) jComboBox4.getSelectedItem();
 				int row = jTable1.getSelectedRow();
-				if (column == -1 || row == -1) {
+				int column = jTable1.getSelectedColumn();
+				int indexAtWall = row * 4 + column;
+				indexAtWall = indexAtWall < 0 ? -1 : indexAtWall;
+
+				if (row == -1 && column == -1) {
 					return;
 				}
-				DefaultComboBoxModel model = (DefaultComboBoxModel) jComboBox4.getModel();
-				com.aim.duty.duty_build_entity.bo.Brick brick = (com.aim.duty.duty_build_entity.bo.Brick) jTable1
-						.getValueAt(row, column);
-				if (brick != null) {
-					model.addElement(brick);
-				}
 
-				int index = jComboBox4.getSelectedIndex();
-				if (index != -1) {
-					jTable1.setValueAt(jComboBox4.getSelectedItem(), row, column);
-					model.removeElementAt(index);
+				com.aim.duty.duty_build_entity.bo.Brick brickAtWall = (com.aim.duty.duty_build_entity.bo.Brick) tableModel
+						.getValueAt(row, column);
+
+				if (propBrick == null && brickAtWall == null) {
+					return;
+				} else if (propBrick != null && brickAtWall != null) {
+					comboModel.removeElementAt(jComboBox4.getSelectedIndex());
+					tableModel.setValueAt(null, row, column);
+
+					comboModel.insertElementAt(brickAtWall,0);
+					tableModel.setValueAt(propBrick, row, column);
+				}else if(propBrick!=null){
+					tableModel.setValueAt(propBrick, row, column);
+					comboModel.removeElementAt(jComboBox4.getSelectedIndex());
+				} else if (brickAtWall != null) {
+					comboModel.insertElementAt(brickAtWall, 0);
+					tableModel.setValueAt(null, row, column);
 				}
+				
+				WanClient buildServer = SpringContext.getBean("buildServer");
+				buildServer.send(CS.newBuilder().setProtocal(BuildProtocalId.GET_WALL_VALUE).setData(CS_GetWallValue.newBuilder().build().toByteString()).build());
+				
 
 			}
 			

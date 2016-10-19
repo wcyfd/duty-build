@@ -15,6 +15,10 @@
 		<property name="buildService" ref="buildServiceImpl"></property>
 	</bean>
 	
+	<bean id="tradeService" class="com.aim.duty.duty_build.module.trade.service.TradeServiceImpl">
+		<property name="marketServer" ref="marketServer"></property>
+	</bean>
+	
 	<bean id="propServiceImpl" class="com.aim.duty.duty_base.service.prop.PropServiceImpl"></bean>
 
 <!-- 

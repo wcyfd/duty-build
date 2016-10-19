@@ -2,7 +2,18 @@ package com.aim.duty.duty_build.net;
 
 import org.apache.mina.core.session.IoSession;
 
+import com.aim.duty.duty_build.cache.SessionCache;
+import com.aim.duty.duty_build_entity.bo.Brick;
+import com.aim.duty.duty_build_entity.common.BuildErrorCode;
+import com.aim.duty.duty_build_entity.navigation.BuildProtocalId;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Trade.SC_BuyProp;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Trade.SC_SaleProp;
+import com.aim.duty.duty_market_entity.navigation.MarketProtocalId;
+import com.aim.duty.duty_market_entity.protobuf.protocal.market.MarketProtocal.SC_BuyCommodity;
+import com.aim.duty.duty_market_entity.protobuf.protocal.market.MarketProtocal.SC_SaleCommodity;
+import com.aim.game_base.entity.net.base.Protocal.SC;
 import com.aim.game_base.net.IoHandlerAdapter;
+import com.google.protobuf.ByteString;
 
 //import byCodeGame.game.cache.local.RoleCache;
 //import byCodeGame.game.entity.bo.Role;
@@ -62,7 +73,45 @@ public class MarketClientHandler extends IoHandlerAdapter {
 	// 当客户端发送的消息到达时
 	@Override
 	public void messageReceived(IoSession session, Object messageObj) throws Exception {
-		System.out.println(messageObj);
+		SC sc = (SC) messageObj;
+		int protocal = sc.getProtocal();
+		if (protocal == MarketProtocalId.BUY_COMMODITY) {
+			SC_BuyCommodity scBuyCommodity = SC_BuyCommodity.parseFrom(sc.getData());
+			ByteString propData = scBuyCommodity.getAbstractProp();
+			if (scBuyCommodity.getSuccess() != 1){
+				System.out.println(scBuyCommodity.getSuccess());
+				return;
+			}
+			int propType = scBuyCommodity.getPropType();
+			int num = scBuyCommodity.getNum();
+			int roleId = scBuyCommodity.getRoleId();
+			Brick b = new Brick();
+			b.deserialize(propData);
+
+			IoSession clientSession = SessionCache.getSessionByRoleId(roleId);
+			clientSession.write(SC
+					.newBuilder()
+					.setProtocal(BuildProtocalId.TRADE_BUY_PROP)
+					.setData(
+							SC_BuyProp.newBuilder().setSuccess(BuildErrorCode.SUCCESS).setPrint(b.toString()).build()
+									.toByteString()).build());
+		} else if (protocal == MarketProtocalId.SALE_COMMODITY) {
+			SC_SaleCommodity scSaleCommodity = SC_SaleCommodity.parseFrom(sc.getData());
+			if (scSaleCommodity.getSuccess() != 1){
+				System.out.println(scSaleCommodity.getSuccess());
+				return;
+			}
+			int roleId = scSaleCommodity.getRoleId();
+			int commodityId = scSaleCommodity.getCommodityId();
+			IoSession clientSession = SessionCache.getSessionByRoleId(roleId);
+
+			clientSession.write(SC.newBuilder().setProtocal(BuildProtocalId.TRADE_SALE_PROP)
+					.setData(SC_SaleProp.newBuilder().setSuccess(BuildErrorCode.SUCCESS).build().toByteString())
+					.build());
+
+		}
+		
+//		System.out.println(messageObj);
 //		Message message = (Message) messageObj;
 //
 //		if (null == message) {

@@ -2,7 +2,6 @@ package com.aim.duty.duty_build;
 
 import java.net.InetSocketAddress;
 
-import com.aim.duty.duty_base.cache.ConstantCache;
 import com.aim.duty.duty_build.cache.config.MagicConfigCache;
 import com.aim.duty.duty_build.cache.config.OreConfigCache;
 import com.aim.duty.duty_build.cache.config.PlayCountConfigCache;
@@ -19,8 +18,8 @@ import com.aim.duty.duty_build_entity.fo.PlayCountConfig;
 import com.aim.game_base.net.SpringContext;
 import com.aim.game_base.net.WanClient;
 import com.aim.game_base.net.WanClient.WanClientType;
-import com.aim.game_base.net.WanServer.WanServerType;
 import com.aim.game_base.net.WanServer;
+import com.aim.game_base.net.WanServer.WanServerType;
 
 /**
  * Hello world!
@@ -40,9 +39,9 @@ public class DutyBuildApp {
 		BuildService buildService = SpringContext.getBean("buildService");
 		buildService.serverInit();
 
-		// WanClient marketServer = SpringContext.getBean("marketServer");
-		// marketServer.startClient(new MarketClientHandler(), new
-		// InetSocketAddress("10.0.51.49", 10001), WanClientType.TCP);
+		WanClient marketServer = SpringContext.getBean("marketServer");
+		marketServer.startClient(new MarketClientHandler(), new InetSocketAddress("127.0.0.1", 10001),
+				WanClientType.TCP);
 
 		WanServer.startServer(new ServerHandler(), new InetSocketAddress(10002), WanServerType.TCP);
 
@@ -59,6 +58,7 @@ public class DutyBuildApp {
 			OreConfig config = new OreConfig();
 			config.setConfigId(i);
 			config.setName(names[i]);
+			config.setBlood((i+1)*20);
 			OreConfigCache.putOreConfig(config);
 		}
 

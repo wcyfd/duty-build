@@ -154,6 +154,7 @@ public class ServerHandler extends IoHandlerAdapter {
 		
 		SC sc = (SC)message;
 		Class<?> clazz = ProtocalNavigation.getClassByProtocalId(sc.getProtocal());
+		System.out.println("buildServer");
 		System.out.println("服务器回写指令号"+sc.getProtocal());
 		ProtobufMessagePrinter.print(sc, clazz);
 	}

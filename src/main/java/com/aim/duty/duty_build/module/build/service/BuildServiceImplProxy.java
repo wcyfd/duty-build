@@ -44,9 +44,9 @@ public class BuildServiceImplProxy implements BuildService {
 	}
 
 	@Override
-	public SC addBrickToWall(Role role, int indexAtWall, int propId) {
+	public SC replaceBrick(Role role, int indexAtWall, int propId) {
 		// TODO Auto-generated method stub
-		return buildService.addBrickToWall(role, indexAtWall, propId);
+		return buildService.replaceBrick(role, indexAtWall, propId);
 	}
 
 	@Override
@@ -73,4 +73,10 @@ public class BuildServiceImplProxy implements BuildService {
 		return buildService.showBag(role);
 	}
 
+	
+	@Override
+	public SC getWallValue(Role role) {
+		// TODO Auto-generated method stub
+		return buildService.getWallValue(role);
+	}
 }

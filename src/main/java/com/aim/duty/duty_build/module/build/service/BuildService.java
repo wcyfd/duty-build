@@ -17,7 +17,7 @@ public interface BuildService {
 
 	public SC showBrickByIndex(Role role, int index);
 
-	public SC addBrickToWall(Role role, int indexAtWall, int propId);
+	public SC replaceBrick(Role role, int indexAtWall, int propId);
 
 	public SC addMagic(Role role, int propId, int magicId);
 
@@ -26,4 +26,6 @@ public interface BuildService {
 	public SC getResult(Role role, List<CS_GetResult.Brick> bricks);
 
 	public SC showBag(Role role);
+	
+	public SC getWallValue(Role role);
 }
