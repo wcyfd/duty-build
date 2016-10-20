@@ -33,6 +33,8 @@ import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_GetWallValue;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_ReplaceBrick;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Trade.CS_BuyProp;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Trade.CS_SaleProp;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Trade.SC_BuyProp;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Trade.SC_SaleProp;
 import com.aim.game_base.entity.net.base.Protocal.CS;
 import com.aim.game_base.net.SpringContext;
 import com.aim.game_base.net.Utils;
@@ -591,7 +593,55 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
 		}else if(message.equals("getWallValue")){
 			SC_GetWallValue result = (SC_GetWallValue) data.get(1);
 			this.getWallValue(result);
+		}else if(message.equals("saleProp")){
+			SC_SaleProp result= (SC_SaleProp)data.get(1);
+			this.saleProp(result);
+		}else if(message.equals("buyProp")){
+			SC_BuyProp result = (SC_BuyProp)data.get(1);
+			this.buyProp(result);
 		}
+	}
+
+	private void buyProp(final SC_BuyProp result) {
+		// TODO Auto-generated method stub
+		
+		EventQueue.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				com.aim.duty.duty_build_entity.bo.Brick brick = new com.aim.duty.duty_build_entity.bo.Brick(){
+					public String toString() {
+						// TODO Auto-generated method stub
+						StringBuilder sb= new StringBuilder();
+						for(com.aim.duty.duty_build_entity.po.Magic magic:this.getMagicMap().values()){
+							sb.append(MagicConfigCache.getMagicConfigById(magic.getMagicId()).getName());								
+						}
+						sb.append(OreConfigCache.getAllMap().get(this.getMineId()).getName());
+						return sb.toString();
+					}
+				};
+				brick.deserialize(result.getAbstractProp());
+				brick.setId(result.getPropId());
+				DefaultComboBoxModel model = (DefaultComboBoxModel) jComboBox4.getModel();
+				model.addElement(brick);
+			}
+		});
+	}
+
+	private void saleProp(SC_SaleProp result) {
+		// TODO Auto-generated method stub
+		EventQueue.invokeLater(new Runnable(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				DefaultComboBoxModel model = (DefaultComboBoxModel) jComboBox4.getModel();
+				int index = jComboBox4.getSelectedIndex();
+				model.removeElementAt(index);
+			}
+			
+		});
 	}
 
 	private void getWallValue(final SC_GetWallValue result) {

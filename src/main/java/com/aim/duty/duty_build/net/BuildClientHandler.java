@@ -10,6 +10,8 @@ import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_CreateRole;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_GetResult;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_GetWallValue;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_ReplaceBrick;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Trade.SC_BuyProp;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Trade.SC_SaleProp;
 import com.aim.game_base.entity.net.base.Protocal.SC;
 import com.aim.game_base.net.IoHandlerAdapter;
 import com.aim.game_base.net.SpringContext;
@@ -88,6 +90,15 @@ public class BuildClientHandler extends IoHandlerAdapter {
 		} else if (protocal == BuildProtocalId.GET_WALL_VALUE) {
 			SC_GetWallValue scData = SC_GetWallValue.parseFrom(data);
 			uiController.getWallValue(scData);
+		} else if (protocal == BuildProtocalId.TRADE_SALE_PROP) {
+			SC_SaleProp scData = SC_SaleProp.parseFrom(data);
+			if (scData.getSuccess() == 1)
+				uiController.saleProp(scData);
+		} else if(protocal == BuildProtocalId.TRADE_BUY_PROP){
+			SC_BuyProp scData = SC_BuyProp.parseFrom(data);
+			if(scData.getSuccess()==1){
+				uiController.buyProp(scData);
+			}
 		}
 
 		// Message message = (Message) messageObj;

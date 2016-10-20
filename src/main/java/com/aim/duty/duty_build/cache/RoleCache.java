@@ -21,6 +21,10 @@ public class RoleCache {
 		Role role = roleMap.get(id);
 		return role;
 	}
+	
+	public static Role getRoleById(int id){
+		return roleMap.get(id);
+	}
 
 	private static Lock lock = new ReentrantLock();
 	private static int id = 0;

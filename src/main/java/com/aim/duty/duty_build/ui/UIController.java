@@ -7,6 +7,8 @@ import java.util.Observable;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_GetResult;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_GetWallValue;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_ReplaceBrick;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Trade.SC_BuyProp;
+import com.aim.duty.duty_build_entity.protobuf.protocal.Trade.SC_SaleProp;
 
 public class UIController extends Observable {
 	private MainFrame mainFrame;
@@ -67,6 +69,27 @@ public class UIController extends Observable {
 		this.setChanged();	
 		
 		this.notifyObservers(list);
+	}
+
+	public void saleProp(SC_SaleProp scData) {
+		// TODO Auto-generated method stub
+		List list = new ArrayList<>();
+		list.add("saleProp");
+		list.add(scData);
+		this.setChanged();
+		
+		this.notifyObservers(list);
+	}
+
+	public void buyProp(SC_BuyProp scData) {
+		// TODO Auto-generated method stub
+		List list = new ArrayList<>();
+		list.add("buyProp");
+		list.add(scData);
+		this.setChanged();
+		
+		this.notifyObservers(list);
+		
 	}
 	
 }

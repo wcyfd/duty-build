@@ -14,6 +14,7 @@ import com.aim.duty.duty_build.cache.SessionCache;
 import com.aim.duty.duty_build.cache.config.OreConfigCache;
 import com.aim.duty.duty_build_entity.bo.Brick;
 import com.aim.duty.duty_build_entity.bo.Role;
+import com.aim.duty.duty_build_entity.bo.Trade;
 import com.aim.duty.duty_build_entity.bo.Wall;
 import com.aim.duty.duty_build_entity.common.BuildErrorCode;
 import com.aim.duty.duty_build_entity.fo.OreConfig;
@@ -62,6 +63,7 @@ public class BuildServiceImpl implements BuildService {
 		Role role = this.initRole(account, name);
 		this.initWall(role);
 		this.initRoom(role);
+		this.initTrade(role);
 		RoleCache.putRole(role);
 		session.setAttribute("roleId", role.getId());
 		SessionCache.addSession(role.getId(), session);
@@ -89,6 +91,13 @@ public class BuildServiceImpl implements BuildService {
 		Room room = new Room();
 		role.setRoom(room);
 		return room;
+	}
+	
+	private Trade initTrade(Role role){
+		Trade trade = new Trade();
+		trade.setTradeEnd(true);
+		role.setTrade(trade);
+		return trade;
 	}
 
 	@Override
