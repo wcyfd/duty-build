@@ -35,7 +35,7 @@ import com.aim.duty.duty_build_entity.protobuf.protocal.Trade.CS_BuyProp;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Trade.CS_SaleProp;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Trade.SC_BuyProp;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Trade.SC_SaleProp;
-import com.aim.game_base.entity.net.base.Protocal.CS;
+import com.aim.game_base.entity.net.base.Protocal.PT;
 import com.aim.game_base.net.SpringContext;
 import com.aim.game_base.net.Utils;
 import com.aim.game_base.net.WanClient;
@@ -278,7 +278,7 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
 					// BuildService buildService =
 					// SpringContext.getBean("buildService");
 					// buildService.createRole(account, name);
-					CS cs = CS.newBuilder().setProtocal(BuildProtocalId.CREATE_ROLE).setData(
+					PT cs = PT.newBuilder().setProtocal(BuildProtocalId.CREATE_ROLE).setData(
 							CS_CreateRole.newBuilder().setAccount(account).setName(name).build().toByteString()).build();
 					WanClient buildClient = SpringContext.getBean("buildServer");
 					buildClient.send(cs);
@@ -311,7 +311,7 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
 			csGetResultBuilder.addBricks(csBrick);
 		}
 		WanClient buildClient = SpringContext.getBean("buildServer");
-		buildClient.send(CS.newBuilder().setProtocal(BuildProtocalId.GET_RESULT).setData(csGetResultBuilder.build().toByteString()).build());
+		buildClient.send(PT.newBuilder().setProtocal(BuildProtocalId.GET_RESULT).setData(csGetResultBuilder.build().toByteString()).build());
 		
 		
 	}
@@ -320,7 +320,7 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
         // TODO add your handling code here:
 		int configId = OreConfigCache.getConfigIdByIndex(jComboBox2.getSelectedIndex());
 		int playCount = PlayCountConfigCache.getCounts().get(jComboBox3.getSelectedIndex());
-		CS cs = CS.newBuilder().setProtocal(BuildProtocalId.CHOOSE_MATERIAL).setData(CS_ChooseMaterial.newBuilder()
+		PT cs = PT.newBuilder().setProtocal(BuildProtocalId.CHOOSE_MATERIAL).setData(CS_ChooseMaterial.newBuilder()
 				.setBrickSourceId(configId).setBrickSourceNum(playCount).build().toByteString()).build();
 		WanClient buildClient = SpringContext.getBean("buildServer");
 		buildClient.send(cs);
@@ -346,7 +346,7 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
 				indexAtWall = indexAtWall < 0 ? -1 : indexAtWall;
 
 				WanClient buildServer = SpringContext.getBean("buildServer");
-				buildServer.send(CS
+				buildServer.send(PT
 						.newBuilder()
 						.setProtocal(BuildProtocalId.REPLACE_BRICK)
 						.setData(
@@ -368,7 +368,7 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
     	int price = Integer.parseInt(data[1]);
     	
 		WanClient buildServer = SpringContext.getBean("buildServer");
-		buildServer.send(CS
+		buildServer.send(PT
 				.newBuilder()
 				.setProtocal(BuildProtocalId.TRADE_SALE_PROP)
 				.setData(
@@ -385,7 +385,7 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
 		int num = Integer.parseInt(data[1]);
 
 		WanClient buildServer = SpringContext.getBean("buildServer");
-		buildServer.send(CS.newBuilder().setProtocal(BuildProtocalId.TRADE_BUY_PROP)
+		buildServer.send(PT.newBuilder().setProtocal(BuildProtocalId.TRADE_BUY_PROP)
 				.setData(CS_BuyProp.newBuilder().setNum(num).setCommodityId(commodityId).build().toByteString())
 				.build());
     }
@@ -704,7 +704,7 @@ public class MainFrame extends javax.swing.JFrame implements Observer{
 				}
 				
 				WanClient buildServer = SpringContext.getBean("buildServer");
-				buildServer.send(CS.newBuilder().setProtocal(BuildProtocalId.GET_WALL_VALUE).setData(CS_GetWallValue.newBuilder().build().toByteString()).build());
+				buildServer.send(PT.newBuilder().setProtocal(BuildProtocalId.GET_WALL_VALUE).setData(CS_GetWallValue.newBuilder().build().toByteString()).build());
 				
 
 			}

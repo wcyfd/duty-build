@@ -7,8 +7,8 @@ import org.apache.mina.core.session.IoSession;
 import com.aim.duty.duty_build.ui.UIController;
 import com.aim.duty.duty_build_entity.bo.Role;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.CS_GetResult.Brick;
-import com.aim.game_base.entity.net.base.Protocal.SC;
-import com.aim.game_base.entity.net.base.Protocal.SC.Builder;
+import com.aim.game_base.entity.net.base.Protocal.PT;
+import com.aim.game_base.entity.net.base.Protocal.PT.Builder;
 
 public class BuildServiceImplProxy implements BuildService {
 
@@ -25,57 +25,57 @@ public class BuildServiceImplProxy implements BuildService {
 	}
 
 	@Override
-	public SC createRole(String account, String name, IoSession session) {
+	public PT createRole(String account, String name, IoSession session) {
 		// TODO Auto-generated method stub
 		return buildService.createRole(account, name, session);
 
 	}
 
 	@Override
-	public SC showWall(Role role) {
+	public PT showWall(Role role) {
 		// TODO Auto-generated method stub
 		return buildService.showWall(role);
 	}
 
 	@Override
-	public SC showBrickByIndex(Role role, int index) {
+	public PT showBrickByIndex(Role role, int index) {
 		// TODO Auto-generated method stub
 		return buildService.showBrickByIndex(role, index);
 	}
 
 	@Override
-	public SC replaceBrick(Role role, int indexAtWall, int propId) {
+	public PT replaceBrick(Role role, int indexAtWall, int propId) {
 		// TODO Auto-generated method stub
 		return buildService.replaceBrick(role, indexAtWall, propId);
 	}
 
 	@Override
-	public SC addMagic(Role role, int propId, int magicId) {
+	public PT addMagic(Role role, int propId, int magicId) {
 		// TODO Auto-generated method stub
 		return buildService.addMagic(role, propId, magicId);
 	}
 
 	@Override
-	public SC chooseMaterial(Role architect, int brickSourceId, int brickSourceNum) {
+	public PT chooseMaterial(Role architect, int brickSourceId, int brickSourceNum) {
 		// TODO Auto-generated method stub
 		return buildService.chooseMaterial(architect, brickSourceId, brickSourceNum);
 	}
 
 	@Override
-	public SC getResult(Role role, List<Brick> bricks) {
+	public PT getResult(Role role, List<Brick> bricks) {
 		// TODO Auto-generated method stub
 		return buildService.getResult(role, bricks);
 	}
 
 	@Override
-	public SC showBag(Role role) {
+	public PT showBag(Role role) {
 		// TODO Auto-generated method stub
 		return buildService.showBag(role);
 	}
 
 	
 	@Override
-	public SC getWallValue(Role role) {
+	public PT getWallValue(Role role) {
 		// TODO Auto-generated method stub
 		return buildService.getWallValue(role);
 	}

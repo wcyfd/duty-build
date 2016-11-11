@@ -6,7 +6,7 @@ import com.aim.duty.duty_build.cache.RoleCache;
 import com.aim.duty.duty_build.module.build.service.BuildService;
 import com.aim.duty.duty_build_entity.bo.Role;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.CS_ChooseMaterial;
-import com.aim.game_base.entity.net.base.Protocal.SC;
+import com.aim.game_base.entity.net.base.Protocal.PT;
 import com.aim.game_base.navigation.ActionSupport;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -25,7 +25,7 @@ public class BuildChooseMaterialAction implements ActionSupport {
 		try {
 			CS_ChooseMaterial cs = CS_ChooseMaterial.parseFrom(data);
 			Role role = RoleCache.getRoleBySession(session);
-			SC builder = buildService.chooseMaterial(role, cs.getBrickSourceId(), cs.getBrickSourceNum());
+			PT builder = buildService.chooseMaterial(role, cs.getBrickSourceId(), cs.getBrickSourceNum());
 			if (session != null) {
 				session.write(builder);
 			}

@@ -15,7 +15,7 @@ import com.aim.duty.duty_build_entity.protobuf.protocal.Trade.SC_SaleProp;
 import com.aim.duty.duty_market_entity.navigation.MarketProtocalId;
 import com.aim.duty.duty_market_entity.protobuf.protocal.market.MarketProtocal.SC_BuyCommodity;
 import com.aim.duty.duty_market_entity.protobuf.protocal.market.MarketProtocal.SC_SaleCommodity;
-import com.aim.game_base.entity.net.base.Protocal.SC;
+import com.aim.game_base.entity.net.base.Protocal.PT;
 import com.aim.game_base.net.IoHandlerAdapter;
 import com.aim.game_base.net.SpringContext;
 import com.google.protobuf.ByteString;
@@ -78,7 +78,7 @@ public class MarketClientHandler extends IoHandlerAdapter {
 	// 当客户端发送的消息到达时
 	@Override
 	public void messageReceived(IoSession session, Object messageObj) throws Exception {
-		SC sc = (SC) messageObj;
+		PT sc = (PT) messageObj;
 		int protocal = sc.getProtocal();
 		
 		if (protocal == MarketProtocalId.BUY_COMMODITY) {

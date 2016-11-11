@@ -6,7 +6,7 @@ import com.aim.duty.duty_build.cache.RoleCache;
 import com.aim.duty.duty_build.module.build.service.BuildService;
 import com.aim.duty.duty_build_entity.bo.Role;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.CS_ReplaceBrick;
-import com.aim.game_base.entity.net.base.Protocal.SC;
+import com.aim.game_base.entity.net.base.Protocal.PT;
 import com.aim.game_base.navigation.ActionSupport;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -25,7 +25,7 @@ public class BuildReplaceBrickAction implements ActionSupport {
 		try {
 			CS_ReplaceBrick cs = CS_ReplaceBrick.parseFrom(data);
 			Role role = RoleCache.getRoleBySession(session);
-			SC sc = buildService.replaceBrick(role, cs.getIndexAtWall(), cs.getPropId());
+			PT sc = buildService.replaceBrick(role, cs.getIndexAtWall(), cs.getPropId());
 			if (session != null) {
 				session.write(sc);
 			}

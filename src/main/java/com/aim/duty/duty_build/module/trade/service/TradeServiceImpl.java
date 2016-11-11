@@ -14,8 +14,8 @@ import com.aim.duty.duty_build_entity.protobuf.protocal.Trade.SC_SaleProp;
 import com.aim.duty.duty_market_entity.navigation.MarketProtocalId;
 import com.aim.duty.duty_market_entity.protobuf.protocal.market.MarketProtocal.CS_BuyCommodity;
 import com.aim.duty.duty_market_entity.protobuf.protocal.market.MarketProtocal.CS_SaleCommodity;
-import com.aim.game_base.entity.net.base.Protocal.CS;
-import com.aim.game_base.entity.net.base.Protocal.SC;
+import com.aim.game_base.entity.net.base.Protocal.PT;
+import com.aim.game_base.entity.net.base.Protocal.PT;
 import com.aim.game_base.net.WanClient;
 import com.google.protobuf.ByteString;
 
@@ -44,7 +44,7 @@ public class TradeServiceImpl implements TradeService {
 		if(prop == null){
 			IoSession clientSession = SessionCache.getSessionByRoleId(role.getId());
 
-			clientSession.write(SC.newBuilder().setProtocal(BuildProtocalId.TRADE_SALE_PROP)
+			clientSession.write(PT.newBuilder().setProtocal(BuildProtocalId.TRADE_SALE_PROP)
 					.setData(SC_SaleProp.newBuilder().setSuccess(BuildErrorCode.SALE_FAILED).build().toByteString())
 					.build());
 			role.getTrade().setTradeEnd(true);
@@ -59,7 +59,7 @@ public class TradeServiceImpl implements TradeService {
 
 		String name = sb.toString();
 
-		CS cs = CS
+		PT cs = PT
 				.newBuilder()
 				.setProtocal(MarketProtocalId.SALE_COMMODITY)
 				.setData(
@@ -84,7 +84,7 @@ public class TradeServiceImpl implements TradeService {
 			role.getTrade().setTradeEnd(false);
 		}
 		
-		CS cs = CS
+		PT cs = PT
 				.newBuilder()
 				.setProtocal(MarketProtocalId.BUY_COMMODITY)
 				.setData(
@@ -96,7 +96,7 @@ public class TradeServiceImpl implements TradeService {
 	private boolean hasTradeTransaction(Role role, int protocal, int errorCode) {
 		if (!role.getTrade().isTradeEnd()) {
 			IoSession session = SessionCache.getSessionByRoleId(role.getId());
-			session.write(SC.newBuilder().setProtocal(protocal)
+			session.write(PT.newBuilder().setProtocal(protocal)
 					.setData(SC_SaleProp.newBuilder().setSuccess(errorCode).build().toByteString()).build());
 			return true;
 		}
@@ -115,7 +115,7 @@ public class TradeServiceImpl implements TradeService {
 
 			role.getPropMap().remove(role.getTrade().getPropId());
 
-			clientSession.write(SC.newBuilder().setProtocal(BuildProtocalId.TRADE_SALE_PROP)
+			clientSession.write(PT.newBuilder().setProtocal(BuildProtocalId.TRADE_SALE_PROP)
 					.setData(SC_SaleProp.newBuilder().setPropId(role.getTrade().getPropId()).setSuccess(BuildErrorCode.SUCCESS).build().toByteString())
 					.build());
 			
@@ -142,7 +142,7 @@ public class TradeServiceImpl implements TradeService {
 			brick.setId(role.getPropUniqueId());
 			role.getPropMap().put(brick.getId(), brick);
 
-			clientSession.write(SC
+			clientSession.write(PT
 					.newBuilder()
 					.setProtocal(BuildProtocalId.TRADE_BUY_PROP)
 					.setData(

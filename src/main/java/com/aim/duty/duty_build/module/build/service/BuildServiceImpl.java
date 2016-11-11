@@ -31,7 +31,7 @@ import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_ReplaceBrick;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_ShowBag;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_ShowBrick;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.SC_ShowWall;
-import com.aim.game_base.entity.net.base.Protocal.SC;
+import com.aim.game_base.entity.net.base.Protocal.PT;
 import com.aim.game_base.net.WanClient;
 
 public class BuildServiceImpl implements BuildService {
@@ -55,9 +55,9 @@ public class BuildServiceImpl implements BuildService {
 	}
 
 	@Override
-	public SC createRole(String account, String name, IoSession session) {
+	public PT createRole(String account, String name, IoSession session) {
 		// TODO Auto-generated method stub
-		SC.Builder sc = SC.newBuilder();
+		PT.Builder sc = PT.newBuilder();
 		SC_CreateRole.Builder sc_createArchitectBuilder = SC_CreateRole.newBuilder();
 
 		Role role = this.initRole(account, name);
@@ -101,9 +101,9 @@ public class BuildServiceImpl implements BuildService {
 	}
 
 	@Override
-	public SC showWall(Role role) {
+	public PT showWall(Role role) {
 		// TODO Auto-generated method stub
-		SC.Builder sc = SC.newBuilder();
+		PT.Builder sc = PT.newBuilder();
 		SC_ShowWall.Builder scShowBuilder = SC_ShowWall.newBuilder();
 
 		Wall wall = role.getWall();
@@ -134,9 +134,9 @@ public class BuildServiceImpl implements BuildService {
 	}
 
 	@Override
-	public SC showBrickByIndex(Role role, int propId) {
+	public PT showBrickByIndex(Role role, int propId) {
 		// TODO Auto-generated method stub
-		SC.Builder sc = SC.newBuilder();
+		PT.Builder sc = PT.newBuilder();
 		SC_ShowBrick.Builder scShowBrick = SC_ShowBrick.newBuilder();
 		Map<Integer, AbstractProp> propMap = role.getPropMap();
 		Brick brick = (Brick) propMap.get(propId);
@@ -154,9 +154,9 @@ public class BuildServiceImpl implements BuildService {
 	}
 
 	@Override
-	public SC replaceBrick(Role role, int indexAtWall, int propId) {
+	public PT replaceBrick(Role role, int indexAtWall, int propId) {
 		// TODO Auto-generated method stub
-		SC.Builder sc = SC.newBuilder();
+		PT.Builder sc = PT.newBuilder();
 		SC_ReplaceBrick.Builder scReplaceBrickBuilder = SC_ReplaceBrick.newBuilder();
 		Map<Integer, AbstractProp> propMap = role.getPropMap();
 
@@ -197,9 +197,9 @@ public class BuildServiceImpl implements BuildService {
 	}
 
 	@Override
-	public SC addMagic(Role role, int propId, int magicId) {
+	public PT addMagic(Role role, int propId, int magicId) {
 		// TODO Auto-generated method stub
-		SC.Builder sc = SC.newBuilder();
+		PT.Builder sc = PT.newBuilder();
 		SC_AddMagic.Builder scAddMagicBuilder = SC_AddMagic.newBuilder();
 		Brick prop = (Brick) role.getPropMap().get(propId);
 
@@ -215,9 +215,9 @@ public class BuildServiceImpl implements BuildService {
 	}
 
 	@Override
-	public SC chooseMaterial(Role role, int brickSourceId, int brickSourceNum) {
+	public PT chooseMaterial(Role role, int brickSourceId, int brickSourceNum) {
 		// TODO Auto-generated method stub
-		SC.Builder sc = SC.newBuilder();
+		PT.Builder sc = PT.newBuilder();
 		SC_ChooseMaterial.Builder sc_chooseMaterial = SC_ChooseMaterial.newBuilder();
 
 		Room room = role.getRoom();
@@ -228,9 +228,9 @@ public class BuildServiceImpl implements BuildService {
 	}
 
 	@Override
-	public SC getResult(Role role, List<CS_GetResult.Brick> bricksList) {
+	public PT getResult(Role role, List<CS_GetResult.Brick> bricksList) {
 		// TODO Auto-generated method stub
-		SC.Builder sc = SC.newBuilder();
+		PT.Builder sc = PT.newBuilder();
 		SC_GetResult.Builder scGetResultBuilder = SC_GetResult.newBuilder();
 
 		for (CS_GetResult.Brick csBrick : bricksList) {
@@ -265,9 +265,9 @@ public class BuildServiceImpl implements BuildService {
 	}
 
 	@Override
-	public SC showBag(Role role) {
+	public PT showBag(Role role) {
 		// TODO Auto-generated method stub
-		SC.Builder sc = SC.newBuilder();
+		PT.Builder sc = PT.newBuilder();
 		SC_ShowBag.Builder scShowBagBuilder = SC_ShowBag.newBuilder();
 
 		Map<Integer, SC_ShowBag.Brick> bricks = new HashMap<>();
@@ -293,7 +293,7 @@ public class BuildServiceImpl implements BuildService {
 	}
 
 	@Override
-	public SC getWallValue(Role role) {
+	public PT getWallValue(Role role) {
 		// TODO Auto-generated method stub
 		Wall wall = role.getWall();
 		Map<Integer, SC_GetWallValue.Magic> magics = new HashMap<>();
@@ -303,7 +303,7 @@ public class BuildServiceImpl implements BuildService {
 					.setValue(magic.getValue()).setMagicId(magic.getMagicId()).build());
 		}
 
-		return SC
+		return PT
 				.newBuilder()
 				.setProtocal(BuildProtocalId.GET_WALL_VALUE)
 				.setData(

@@ -4,7 +4,7 @@ import org.apache.mina.core.session.IoSession;
 
 import com.aim.duty.duty_build.module.build.service.BuildService;
 import com.aim.duty.duty_build_entity.protobuf.protocal.Build.CS_CreateRole;
-import com.aim.game_base.entity.net.base.Protocal.SC;
+import com.aim.game_base.entity.net.base.Protocal.PT;
 import com.aim.game_base.navigation.ActionSupport;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -24,7 +24,7 @@ public class BuildCreateRoleAction implements ActionSupport {
 			CS_CreateRole cs = CS_CreateRole.parseFrom(data);
 			String account = cs.getAccount();
 			String name = cs.getName();
-			SC builder = buildService.createRole(account, name,session);
+			PT builder = buildService.createRole(account, name,session);
 			if (session != null) {
 				session.write(builder);
 			}
